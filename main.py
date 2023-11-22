@@ -84,7 +84,9 @@ def gameLoop(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject)
 
         # returns a dictionary of the keys that were pressed
         keys = pygame.key.get_pressed()
+
         updateField(keys, paddleRed, paddleBlue)
+
         drawField(paddleRed, paddleBlue, puck)
 
         # updates appearance of the entire screen
@@ -111,7 +113,12 @@ def updateField(keys, paddleRed: FieldObject, paddleBlue: FieldObject):
         paddleRed.pos.updatePosition(-1, 0)   # red moves left
     if keys[K_d]:
         paddleRed.pos.updatePosition(1, 0)    # red moves right
+
     checkBoundaries(paddleRed, paddleBlue)
+    if pygame.sprite.collide_circle(paddleRed, puck):
+        print("Collision with red")
+    if pygame.sprite.collide_circle(paddleBlue, puck):
+        print("Collision with blue")
 
 def checkBoundaries(paddleRed: FieldObject, paddleBlue: FieldObject):
     

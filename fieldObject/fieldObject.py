@@ -10,14 +10,15 @@ class FieldObject(pygame.sprite.Sprite):
     def __init__(self, color, pixelsX, pixelsY, radius):
 
         # inherits from Sprite 
-        super().__init__()
-
+        super(FieldObject, self).__init__()
+        
         # include radius b/c all field objects are circles
         self.radius = radius
 
         # surface size is twice the size of the radius
         surfaceSize = radius * 2
         self.surface = pygame.Surface((surfaceSize, surfaceSize))
+        self.rect = self.surface.get_rect(center=(pixelsX, pixelsY))
 
         # red or blue for paddles, and black for puck
         self.color = color
