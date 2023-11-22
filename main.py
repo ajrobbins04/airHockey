@@ -1,0 +1,127 @@
+# import and initialize PyGame
+import pygame
+pygame.init()
+
+import sys
+print(sys.path)
+
+# measured in pixels
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 600
+
+# sets up game window w/600 px height and 1200px width
+screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+
+GREEN = (199, 214, 146)
+RED = (255,0,0)
+BLUE = (0,0,205)
+WHITE = (255, 255, 255)
+
+from paddle.paddle import Paddle
+
+def createPaddleRed():
+
+    quarterWidth = SCREEN_WIDTH / 4
+    pixelsX = quarterWidth
+    pixelsY = SCREEN_HEIGHT / 2
+
+    return Paddle("red", pixelsX, pixelsY)
+
+def createPaddleBlue():
+
+    quarterWidth = SCREEN_WIDTH / 4
+    pixelsX = quarterWidth * 3
+    pixelsY = SCREEN_HEIGHT / 2
+
+    return Paddle("blue", pixelsX, pixelsY)
+
+paddleRed = createPaddleRed()
+paddleBlue = createPaddleBlue()
+
+# import keys to handle events
+from pygame.locals import(
+    K_UP,
+    K_DOWN,
+    K_LEFT,
+    K_RIGHT,
+    K_w,
+    K_s,
+    K_a,
+    K_d,
+    K_SPACE,
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT,     # triggered when user closes window
+)
+
+def gameLoop(paddleRed: Paddle, paddleBlue: Paddle):
+
+    running = True
+
+    while running:
+
+        # access list of active events in the queue
+        for event in pygame.event.get():
+
+            # returns a dictionary of the keys that were pressed
+            keys = pygame.key.get_pressed()
+
+            # true whenever user hits a key
+            if event.type == KEYDOWN:
+                if keys[K_ESCAPE]:
+                    running = False
+                elif keys[K_SPACE]:
+                    pause = True
+                else:
+                    updateField(keys)
+            elif event.type == QUIT:
+                running = False
+
+        drawField(paddleRed, paddleBlue)
+
+        # updates appearance of the entire screen
+        pygame.display.flip()
+
+    # quit once out of the game loop    
+    pygame.quit()
+
+def updateField(keys):
+    moveUp_1 = False 
+    moveDown_1 = False
+    moveLeft_1 = False
+    moveRight_1 = False
+    moveUp_2 = False
+    moveDown_2 = False
+    moveLeft_2 = False
+    moveRight_2 = False
+    pause = False
+    if keys[K_UP]:
+        moveUp_1 = True
+    if keys[K_DOWN]:
+        moveDown_1 = True
+    if keys[K_LEFT]:
+        moveLeft_1 = True
+    if keys[K_RIGHT]:
+        moveRight_1 = True
+    if keys[K_w]:
+        moveUp_2 = True
+    if keys[K_s]:
+        moveDown_2 = True
+    if keys[K_a]:
+        moveLeft_2 = True
+    if keys[K_d]:
+        moveRight_2 = True
+
+def drawField(paddleRed: Paddle, paddleBlue: Paddle):
+        
+        # create a green playing field
+        screen.fill(GREEN)
+        
+        pygame.draw.rect(screen, WHITE, (50, 50, SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100), 2)  # Outer boundary
+        pygame.draw.line(screen, WHITE, (SCREEN_WIDTH // 2, 50), (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50), 2)  # Center line
+        pygame.draw.circle(screen, WHITE, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 100, 2)  # Center circle
+
+        pygame.draw.circle(screen, paddleRed.getColor(), paddleRed.pos.getPosition(), paddleRed.getRadius())
+        pygame.draw.circle(screen, paddleBlue.getColor(), paddleBlue.pos.getPosition(), paddleBlue.getRadius())
+        
+gameLoop(paddleRed, paddleBlue)
