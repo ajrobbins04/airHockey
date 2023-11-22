@@ -119,12 +119,23 @@ def checkBoundaries(paddleRed: FieldObject, paddleBlue: FieldObject):
     elif paddleRed.getPosY() - paddleRed.getRadius() < 0:
         paddleRed.pos.setY(0 + paddleRed.getRadius())
 
+    # don't let paddleRed got too far to the left, or past the midpoint of the screen
+    if paddleRed.getPosX() - paddleRed.getRadius() < 0:
+        paddleRed.pos.setX(0 + paddleRed.getRadius())
+    elif paddleRed.getPosX() + paddleRed.getRadius() > SCREEN_WIDTH // 2:
+        paddleRed.pos.setX((SCREEN_WIDTH // 2) - paddleRed.getRadius())
+
     # don't let paddleBlue go too far up or down
     if paddleBlue.getPosY() + paddleBlue.getRadius() > SCREEN_HEIGHT:
         paddleBlue.pos.setY(SCREEN_HEIGHT - paddleBlue.getRadius())
     elif paddleBlue.getPosY() - paddleBlue.getRadius() < 0:
         paddleBlue.pos.setY(0 + paddleBlue.getRadius())
 
+    # don't let paddleBlue got too far to the right, or past the midpoint of the screen
+    if paddleBlue.getPosX() + paddleBlue.getRadius() > SCREEN_WIDTH:
+        paddleBlue.pos.setX(SCREEN_WIDTH - paddleBlue.getRadius())
+    elif paddleBlue.getPosX() - paddleBlue.getRadius() < SCREEN_WIDTH // 2:
+        paddleBlue.pos.setX((SCREEN_WIDTH // 2) + paddleBlue.getRadius())
 
 def drawField(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject):
         
