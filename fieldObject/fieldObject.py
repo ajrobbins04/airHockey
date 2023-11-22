@@ -16,9 +16,9 @@ class Paddle(pygame.sprite.Sprite):
 
         # inherits from Sprite 
         super().__init__()
-        self.surface = pygame.Surface((100, 100))
+        self.surface = pygame.Surface((80, 80))
         
-        self.radius = 50
+        self.radius = 40
 
         if color == "red":
             self.color = RED

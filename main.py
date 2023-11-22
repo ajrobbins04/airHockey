@@ -117,11 +117,11 @@ def drawField(paddleRed: Paddle, paddleBlue: Paddle):
         # create a green playing field
         screen.fill(GREEN)
         
-        pygame.draw.rect(screen, WHITE, (50, 50, SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100), 2)  # Outer boundary
-        pygame.draw.line(screen, WHITE, (SCREEN_WIDTH // 2, 50), (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50), 2)  # Center line
-        pygame.draw.circle(screen, WHITE, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 100, 2)  # Center circle
+        pygame.draw.rect(screen, WHITE, (15, 15, SCREEN_WIDTH - 30, SCREEN_HEIGHT - 30), 2)  # outer boundary
+        pygame.draw.line(screen, WHITE, (SCREEN_WIDTH // 2, 15), (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 15), 2)  # center line
+        pygame.draw.circle(screen, WHITE, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 100, 2)  # center circle
 
-        pygame.draw.circle(screen, paddleRed.getColor(), paddleRed.pos.getPosition(), paddleRed.getRadius())
-        pygame.draw.circle(screen, paddleBlue.getColor(), paddleBlue.pos.getPosition(), paddleBlue.getRadius())
-        
+        pygame.draw.circle(screen, paddleRed.getColor(), paddleRed.pos.getPosition(), paddleRed.getRadius())    # red paddle
+        pygame.draw.circle(screen, paddleBlue.getColor(), paddleBlue.pos.getPosition(), paddleBlue.getRadius()) # blue paddle
+
 gameLoop(paddleRed, paddleBlue)
