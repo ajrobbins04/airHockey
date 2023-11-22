@@ -2,9 +2,6 @@
 import pygame
 pygame.init()
 
-import sys
-print(sys.path)
-
 # measured in pixels
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 600
@@ -16,27 +13,38 @@ GREEN = (199, 214, 146)
 RED = (255,0,0)
 BLUE = (0,0,205)
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
-from paddle.paddle import Paddle
+from fieldObject.fieldObject import FieldObject
 
 def createPaddleRed():
 
     quarterWidth = SCREEN_WIDTH / 4
     pixelsX = quarterWidth
     pixelsY = SCREEN_HEIGHT / 2
+    radius = 40
 
-    return Paddle("red", pixelsX, pixelsY)
+    return FieldObject("red", pixelsX, pixelsY, radius)
 
 def createPaddleBlue():
 
     quarterWidth = SCREEN_WIDTH / 4
     pixelsX = quarterWidth * 3
     pixelsY = SCREEN_HEIGHT / 2
+    radius = 40
+    return FieldObject("blue", pixelsX, pixelsY, radius)
 
-    return Paddle("blue", pixelsX, pixelsY)
+def createPuck():
+
+    quarterWidth = SCREEN_WIDTH / 4
+    pixelsX = quarterWidth * 2
+    pixelsY = SCREEN_HEIGHT / 2
+    radius = 30
+    return FieldObject(BLACK, pixelsX, pixelsY, radius)
 
 paddleRed = createPaddleRed()
 paddleBlue = createPaddleBlue()
+puck = createPuck()
 
 # import keys to handle events
 from pygame.locals import(
@@ -54,7 +62,7 @@ from pygame.locals import(
     QUIT,     # triggered when user closes window
 )
 
-def gameLoop(paddleRed: Paddle, paddleBlue: Paddle):
+def gameLoop(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject):
 
     running = True
 
@@ -77,7 +85,7 @@ def gameLoop(paddleRed: Paddle, paddleBlue: Paddle):
             elif event.type == QUIT:
                 running = False
 
-        drawField(paddleRed, paddleBlue)
+        drawField(paddleRed, paddleBlue, puck)
 
         # updates appearance of the entire screen
         pygame.display.flip()
@@ -112,7 +120,7 @@ def updateField(keys):
     if keys[K_d]:
         moveRight_2 = True
 
-def drawField(paddleRed: Paddle, paddleBlue: Paddle):
+def drawField(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject):
         
         # create a green playing field
         screen.fill(GREEN)
@@ -123,5 +131,6 @@ def drawField(paddleRed: Paddle, paddleBlue: Paddle):
 
         pygame.draw.circle(screen, paddleRed.getColor(), paddleRed.pos.getPosition(), paddleRed.getRadius())    # red paddle
         pygame.draw.circle(screen, paddleBlue.getColor(), paddleBlue.pos.getPosition(), paddleBlue.getRadius()) # blue paddle
+        pygame.draw.circle(screen, puck.getColor(), puck.pos.getPosition(), puck.getRadius())                   # hockey puck
 
-gameLoop(paddleRed, paddleBlue)
+gameLoop(paddleRed, paddleBlue, puck)
