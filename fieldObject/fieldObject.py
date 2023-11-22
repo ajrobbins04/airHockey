@@ -4,11 +4,6 @@ pygame.init()
 
 from position.position import Position
 
-RED = (255,0,0)
-BLUE = (0,0,205)
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-
 # Define a Player object by extending pygame's Sprite
 # The surface drawn on the screen is now an attribute of 'player'
 class FieldObject(pygame.sprite.Sprite):
@@ -24,12 +19,8 @@ class FieldObject(pygame.sprite.Sprite):
         surfaceSize = radius * 2
         self.surface = pygame.Surface((surfaceSize, surfaceSize))
 
-        if color == "red":     # first paddle
-            self.color = RED
-        elif color == "blue":  # second paddle
-            self.color = BLUE
-        else:
-            self.color = BLACK # hockey puck
+        # red or blue for paddles, and black for puck
+        self.color = color
 
         # the position is the circles center
         self.pos = Position(pixelsX, pixelsY)
@@ -42,6 +33,12 @@ class FieldObject(pygame.sprite.Sprite):
     
     def getRadius(self):
         return self.radius
-
+    
+    def getPosX(self):
+        return self.pos.getX()
+    
+    def getPosY(self):
+        return self.pos.getY()
+    
     def getPosition(self):
         return self.pos.getPosition()

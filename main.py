@@ -23,7 +23,7 @@ def createPaddleRed():
     pixelsY = SCREEN_HEIGHT / 2
     radius = 40
 
-    return FieldObject("red", pixelsX, pixelsY, radius)
+    return FieldObject(RED, pixelsX, pixelsY, radius)
 
 def createPaddleBlue():
 
@@ -31,7 +31,7 @@ def createPaddleBlue():
     pixelsX = quarterWidth * 3
     pixelsY = SCREEN_HEIGHT / 2
     radius = 40
-    return FieldObject("blue", pixelsX, pixelsY, radius)
+    return FieldObject(BLUE, pixelsX, pixelsY, radius)
 
 def createPuck():
 
@@ -70,20 +70,19 @@ def gameLoop(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject)
         # access list of active events in the queue
         for event in pygame.event.get():
 
-            # returns a dictionary of the keys that were pressed
-            keys = pygame.key.get_pressed()
-
             # true whenever user hits a key
             if event.type == KEYDOWN:
-                if keys[K_ESCAPE]:
+                if event.key == K_ESCAPE:
                     running = False
-                elif keys[K_SPACE]:
+                elif event.key == K_SPACE:
                     pause = True
-                else:
-                    updateField(keys)
+                    
             elif event.type == QUIT:
                 running = False
 
+        # returns a dictionary of the keys that were pressed
+        keys = pygame.key.get_pressed()
+        updateField(keys, paddleRed, paddleBlue)
         drawField(paddleRed, paddleBlue, puck)
 
         # updates appearance of the entire screen
@@ -92,32 +91,40 @@ def gameLoop(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject)
     # quit once out of the game loop    
     pygame.quit()
 
-def updateField(keys):
-    moveUp_1 = False 
-    moveDown_1 = False
-    moveLeft_1 = False
-    moveRight_1 = False
-    moveUp_2 = False
-    moveDown_2 = False
-    moveLeft_2 = False
-    moveRight_2 = False
-    pause = False
+def updateField(keys, paddleRed: FieldObject, paddleBlue: FieldObject):
+
     if keys[K_UP]:
-        moveUp_1 = True
+        paddleBlue.pos.updatePosition(0, -1)  # blue moves up
     if keys[K_DOWN]:
-        moveDown_1 = True
+        paddleBlue.pos.updatePosition(0, 1)   # blue moves down
     if keys[K_LEFT]:
-        moveLeft_1 = True
+        paddleBlue.pos.updatePosition(-1, 0)  # blue moves left
     if keys[K_RIGHT]:
-        moveRight_1 = True
+        paddleBlue.pos.updatePosition(1, 0)   # blue moves right
     if keys[K_w]:
-        moveUp_2 = True
+        paddleRed.pos.updatePosition(0, -1)   # red moves up
     if keys[K_s]:
-        moveDown_2 = True
+        paddleRed.pos.updatePosition(0, 1)    # red moves down
     if keys[K_a]:
-        moveLeft_2 = True
+        paddleRed.pos.updatePosition(-1, 0)   # red moves left
     if keys[K_d]:
-        moveRight_2 = True
+        paddleRed.pos.updatePosition(1, 0)    # red moves right
+    checkBoundaries(paddleRed, paddleBlue)
+
+def checkBoundaries(paddleRed: FieldObject, paddleBlue: FieldObject):
+    
+    # don't let paddleRed go too far up or down
+    if paddleRed.getPosY() + paddleRed.getRadius() > SCREEN_HEIGHT:
+        paddleRed.pos.setY(SCREEN_HEIGHT - paddleRed.getRadius())
+    elif paddleRed.getPosY() - paddleRed.getRadius() < 0:
+        paddleRed.pos.setY(0 + paddleRed.getRadius())
+
+    # don't let paddleBlue go too far up or down
+    if paddleBlue.getPosY() + paddleBlue.getRadius() > SCREEN_HEIGHT:
+        paddleBlue.pos.setY(SCREEN_HEIGHT - paddleBlue.getRadius())
+    elif paddleBlue.getPosY() - paddleBlue.getRadius() < 0:
+        paddleBlue.pos.setY(0 + paddleBlue.getRadius())
+
 
 def drawField(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject):
         
@@ -128,17 +135,17 @@ def drawField(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject
         pygame.draw.line(screen, BLACK, (SCREEN_WIDTH // 2, 5), (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 3), 2)  # center line
         pygame.draw.circle(screen, BLACK, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 100, 2)                  # center circle
 
-        # Goal boxes
+        # goal boxes
         box_width = 150
         box_height = 300
 
-        # Left goal box (red goal)
-        pygame.draw.rect(screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2)
-        pygame.draw.line(screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2), (0, ((SCREEN_HEIGHT - box_height) // 2)* 2.5), 4)
+        # left goal box
+        pygame.draw.rect(screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2) 
+        pygame.draw.line(screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2), (0, ((SCREEN_HEIGHT - box_height) // 2)* 2.5), 4) 
 
-        # Right goal box (blue goal)
-        pygame.draw.rect(screen, BLACK, (SCREEN_WIDTH - box_width, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2)
-        pygame.draw.line(screen, BLACK, (SCREEN_WIDTH - 2, (SCREEN_HEIGHT - box_height) // 2), (SCREEN_WIDTH - 2, ((SCREEN_HEIGHT - box_height) // 2) + box_height), 4)
+        # right goal box
+        pygame.draw.rect(screen, BLACK, (SCREEN_WIDTH - box_width, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2)  
+        pygame.draw.line(screen, BLACK, (SCREEN_WIDTH - 2, (SCREEN_HEIGHT - box_height) // 2), (SCREEN_WIDTH - 2, ((SCREEN_HEIGHT - box_height) // 2) + box_height), 4) 
 
         pygame.draw.circle(screen, paddleRed.getColor(), paddleRed.pos.getPosition(), paddleRed.getRadius())    # red paddle
         pygame.draw.circle(screen, paddleBlue.getColor(), paddleBlue.pos.getPosition(), paddleBlue.getRadius()) # blue paddle
