@@ -45,6 +45,8 @@ paddleRed = createPaddleRed()
 paddleBlue = createPaddleBlue()
 puck = createPuck()
 
+sprites = pygame.sprite.Group(paddleRed, paddleBlue, puck)
+
 # import keys to handle events
 from pygame.locals import(
     K_UP,
