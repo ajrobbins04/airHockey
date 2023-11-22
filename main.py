@@ -3,13 +3,12 @@ import pygame
 pygame.init()
 
 # measured in pixels
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1400
+SCREEN_HEIGHT = 700
 
 # sets up game window w/600 px height and 1200px width
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
-GREEN = (199, 214, 146)
 RED = (255,0,0)
 BLUE = (0,0,205)
 WHITE = (255, 255, 255)
@@ -123,11 +122,23 @@ def updateField(keys):
 def drawField(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject):
         
         # create a green playing field
-        screen.fill(GREEN)
+        screen.fill(WHITE)
         
-        pygame.draw.rect(screen, WHITE, (15, 15, SCREEN_WIDTH - 30, SCREEN_HEIGHT - 30), 2)  # outer boundary
-        pygame.draw.line(screen, WHITE, (SCREEN_WIDTH // 2, 15), (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 15), 2)  # center line
-        pygame.draw.circle(screen, WHITE, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 100, 2)  # center circle
+        pygame.draw.rect(screen, BLACK, (3, 3, SCREEN_WIDTH - 6, SCREEN_HEIGHT - 6), 2)                     # outer boundary
+        pygame.draw.line(screen, BLACK, (SCREEN_WIDTH // 2, 5), (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 3), 2)  # center line
+        pygame.draw.circle(screen, BLACK, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 100, 2)                  # center circle
+
+        # Goal boxes
+        box_width = 150
+        box_height = 300
+
+        # Left goal box (red goal)
+        pygame.draw.rect(screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2)
+        pygame.draw.line(screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2), (0, ((SCREEN_HEIGHT - box_height) // 2)* 2.5), 4)
+
+        # Right goal box (blue goal)
+        pygame.draw.rect(screen, BLACK, (SCREEN_WIDTH - box_width, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2)
+        pygame.draw.line(screen, BLACK, (SCREEN_WIDTH - 2, (SCREEN_HEIGHT - box_height) // 2), (SCREEN_WIDTH - 2, ((SCREEN_HEIGHT - box_height) // 2) + box_height), 4)
 
         pygame.draw.circle(screen, paddleRed.getColor(), paddleRed.pos.getPosition(), paddleRed.getRadius())    # red paddle
         pygame.draw.circle(screen, paddleBlue.getColor(), paddleBlue.pos.getPosition(), paddleBlue.getRadius()) # blue paddle
