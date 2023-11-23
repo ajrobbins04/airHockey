@@ -18,6 +18,8 @@ class FieldObject(pygame.sprite.Sprite):
         # surface size is twice the size of the radius
         surfaceSize = radius * 2
         self.surface = pygame.Surface((surfaceSize, surfaceSize))
+
+        # include rect to use its collision detection methods
         self.rect = self.surface.get_rect(center=(pixelsX, pixelsY))
 
         # red or blue for paddles, and black for puck
