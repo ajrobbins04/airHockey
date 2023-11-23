@@ -124,13 +124,13 @@ def updateField(keys, paddleRed: Paddle, paddleBlue: Paddle, puck: Puck):
 
 def checkPuckBoundaries(puck: Puck):
     if puck.getPosY() + puck.getRadius() > SCREEN_HEIGHT:   # hit bottom of field
-        puck.bounce()
+        puck.bounce(360)
     elif puck.getPosY() - puck.getRadius() < 0: # hit top of field
-        puck.bounce()
+        puck.bounce(360)
     elif puck.getPosX() - puck.getRadius() < 0:   # hit left side of field
-        puck.bounce()
+        puck.bounce(180)
     elif puck.getPosX() + puck.getRadius() > SCREEN_WIDTH:  # hit right side of field
-        puck.bounce()
+        puck.bounce(180)
 
 def checkBoundaries(paddleRed: Paddle, paddleBlue: Paddle):
     

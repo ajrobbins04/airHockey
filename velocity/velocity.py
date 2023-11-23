@@ -33,12 +33,12 @@ class Velocity:
     def getVelocity(self):
         return self.dx, self.dy
     
-    def reverseVelocity(self):
+    def reverseVelocity(self, minuend):
       #  self.dx = self.getDX() * -1
       #  self.dy = self.getDY() * -1
-        self.travelAngle = 180 - self.getTravelAngle()
+        self.travelAngle = minuend - self.getTravelAngle()
         angle_radians = math.radians(self.travelAngle)
         dx = self.speed * math.cos(angle_radians) 
         dy = self.speed * math.sin(angle_radians) 
-        self.dx = dx 
+        self.dx = dx
         self.dy = dy 

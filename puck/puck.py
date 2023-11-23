@@ -16,6 +16,7 @@ class Puck(FieldObject):
         self.pos.addY(self.velocity.getDY())
         self.updateRect()
 
-    def bounce(self):
-        self.velocity.reverseVelocity()
+    # minuend is first num in a subtraction problem
+    def bounce(self, minuend): 
+        self.velocity.reverseVelocity(minuend) 
         self.move()
