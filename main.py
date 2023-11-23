@@ -14,7 +14,8 @@ BLUE = (0,0,205)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-from fieldObject.fieldObject import FieldObject
+from paddle.paddle import Paddle
+from puck.puck import Puck
 
 def createPaddleRed():
 
@@ -23,7 +24,7 @@ def createPaddleRed():
     pixelsY = SCREEN_HEIGHT / 2
     radius = 40
 
-    return FieldObject(RED, pixelsX, pixelsY, radius)
+    return Paddle(RED, pixelsX, pixelsY, radius)
 
 def createPaddleBlue():
 
@@ -31,7 +32,7 @@ def createPaddleBlue():
     pixelsX = quarterWidth * 3
     pixelsY = SCREEN_HEIGHT / 2
     radius = 40
-    return FieldObject(BLUE, pixelsX, pixelsY, radius)
+    return Paddle(BLUE, pixelsX, pixelsY, radius)
 
 def createPuck():
 
@@ -39,13 +40,11 @@ def createPuck():
     pixelsX = quarterWidth * 2
     pixelsY = SCREEN_HEIGHT / 2
     radius = 30
-    return FieldObject(BLACK, pixelsX, pixelsY, radius)
+    return Puck(BLACK, pixelsX, pixelsY, radius)
 
 paddleRed = createPaddleRed()
 paddleBlue = createPaddleBlue()
 puck = createPuck()
-
-sprites = pygame.sprite.Group(paddleRed, paddleBlue, puck)
 
 # import keys to handle events
 from pygame.locals import(
@@ -63,7 +62,7 @@ from pygame.locals import(
     QUIT,     # triggered when user closes window
 )
 
-def gameLoop(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject):
+def gameLoop(paddleRed: Paddle, paddleBlue: Paddle, puck: Puck):
 
     running = True
 
@@ -95,7 +94,7 @@ def gameLoop(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject)
     # quit once out of the game loop    
     pygame.quit()
 
-def updateField(keys, paddleRed: FieldObject, paddleBlue: FieldObject):
+def updateField(keys, paddleRed: Paddle, paddleBlue: Paddle):
 
     if keys[K_UP]:
         paddleBlue.updatePosition(0, -1)  # blue moves up
@@ -120,7 +119,7 @@ def updateField(keys, paddleRed: FieldObject, paddleBlue: FieldObject):
     if pygame.sprite.collide_circle(paddleBlue, puck):
         print("Collision with blue")
 
-def checkBoundaries(paddleRed: FieldObject, paddleBlue: FieldObject):
+def checkBoundaries(paddleRed: Paddle, paddleBlue: Paddle):
     
     # don't let paddleRed go too far up or down
     if paddleRed.getPosY() + paddleRed.getRadius() > SCREEN_HEIGHT:
@@ -146,7 +145,7 @@ def checkBoundaries(paddleRed: FieldObject, paddleBlue: FieldObject):
     elif paddleBlue.getPosX() - paddleBlue.getRadius() < SCREEN_WIDTH // 2:
         paddleBlue.pos.setX((SCREEN_WIDTH // 2) + paddleBlue.getRadius())
 
-def drawField(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject):
+def drawField(paddleRed: Paddle, paddleBlue: Paddle, puck: Puck):
         
         # create a green playing field
         screen.fill(WHITE)
