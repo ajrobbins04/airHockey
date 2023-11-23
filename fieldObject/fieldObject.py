@@ -52,3 +52,6 @@ class FieldObject(pygame.sprite.Sprite):
     
     def updateRect(self):
         self.rect.center = self.getPosition()
+
+    def draw_field_obj(self, screen: pygame.Surface):
+        pygame.draw.circle(screen, self.getColor(), self.pos.getPosition(), self.getRadius())  
