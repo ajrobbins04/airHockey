@@ -98,21 +98,21 @@ def gameLoop(paddleRed: FieldObject, paddleBlue: FieldObject, puck: FieldObject)
 def updateField(keys, paddleRed: FieldObject, paddleBlue: FieldObject):
 
     if keys[K_UP]:
-        paddleBlue.pos.updatePosition(0, -1)  # blue moves up
+        paddleBlue.updatePosition(0, -1)  # blue moves up
     if keys[K_DOWN]:
-        paddleBlue.pos.updatePosition(0, 1)   # blue moves down
+        paddleBlue.updatePosition(0, 1)   # blue moves down
     if keys[K_LEFT]:
-        paddleBlue.pos.updatePosition(-1, 0)  # blue moves left
+        paddleBlue.updatePosition(-1, 0)  # blue moves left
     if keys[K_RIGHT]:
-        paddleBlue.pos.updatePosition(1, 0)   # blue moves right
+        paddleBlue.updatePosition(1, 0)   # blue moves right
     if keys[K_w]:
-        paddleRed.pos.updatePosition(0, -1)   # red moves up
+        paddleRed.updatePosition(0, -1)   # red moves up
     if keys[K_s]:
-        paddleRed.pos.updatePosition(0, 1)    # red moves down
+        paddleRed.updatePosition(0, 1)    # red moves down
     if keys[K_a]:
-        paddleRed.pos.updatePosition(-1, 0)   # red moves left
+        paddleRed.updatePosition(-1, 0)   # red moves left
     if keys[K_d]:
-        paddleRed.pos.updatePosition(1, 0)    # red moves right
+        paddleRed.updatePosition(1, 0)    # red moves right
 
     checkBoundaries(paddleRed, paddleBlue)
     if pygame.sprite.collide_circle(paddleRed, puck):

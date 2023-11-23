@@ -43,3 +43,10 @@ class FieldObject(pygame.sprite.Sprite):
     
     def getPosition(self):
         return self.pos.getPosition()
+    
+    def updatePosition(self, pixelsX, pixelsY):
+        self.pos.updatePos(pixelsX, pixelsY)
+        self.updateRect()
+    
+    def updateRect(self):
+        self.rect.center = self.getPosition()

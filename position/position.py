@@ -20,8 +20,8 @@ class Position:
 
     def setY(self, pixelsY):
         self.y = pixelsY
-        
-    def updatePosition(self, pixelsX, pixelsY):
+
+    def updatePos(self, pixelsX, pixelsY):
         self.addX(pixelsX)
         self.addY(pixelsY)
 
