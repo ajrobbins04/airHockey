@@ -15,3 +15,7 @@ class Puck(FieldObject):
         self.pos.addX(self.velocity.getDX())
         self.pos.addY(self.velocity.getDY())
         self.updateRect()
+
+    def bounce(self):
+        self.velocity.reverseVelocity()
+        self.move()

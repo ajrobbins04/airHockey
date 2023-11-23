@@ -116,11 +116,21 @@ def updateField(keys, paddleRed: Paddle, paddleBlue: Paddle, puck: Puck):
         paddleRed.updatePosition(1, 0)    # red moves right
 
     checkBoundaries(paddleRed, paddleBlue)
+    checkPuckBoundaries(puck)
     if pygame.sprite.collide_circle(paddleRed, puck):
         print("Collision with red")
     if pygame.sprite.collide_circle(paddleBlue, puck):
         print("Collision with blue")
 
+def checkPuckBoundaries(puck: Puck):
+    if puck.getPosY() + puck.getRadius() > SCREEN_HEIGHT:   # hit bottom of field
+        puck.bounce()
+    elif puck.getPosY() - puck.getRadius() < 0: # hit top of field
+        puck.bounce()
+    elif puck.getPosX() - puck.getRadius() < 0:   # hit left side of field
+        puck.bounce()
+    elif puck.getPosX() + puck.getRadius() > SCREEN_WIDTH:  # hit right side of field
+        puck.bounce()
 
 def checkBoundaries(paddleRed: Paddle, paddleBlue: Paddle):
     
