@@ -12,22 +12,23 @@ class Puck(FieldObject):
         self.velocity = Velocity()
 
         # assign current position to rect.center
-        self.updateRect()
+        self.update_rect()
 
     def update(self):
 
         # use velocity to assign new position
-        self.pos.addX(self.velocity.getDX())
-        self.pos.addY(self.velocity.getDY())
+        self.pos.add_x(self.velocity.get_dx())
+        self.pos.add_y(self.velocity.get_dy())
 
         # reassigns rect.center to new position
-        self.updateRect()
+        self.update_rect()
 
         # add friction to speed
-        self.velocity.speed *= 0.99
+       # self.velocity.speed *= 0.99
 
     # current angle of travel is subtracted from the minuend
     # to find new angle of travel
     def bounce(self, minuend): 
-        self.velocity.switchVelocity(minuend) 
+        self.velocity.update_travel_angle(minuend) 
+        self.velocity.update_velocity()
         self.update()

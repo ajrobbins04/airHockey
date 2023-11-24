@@ -35,81 +35,73 @@ class Game:
  
     def _create_paddle_red(self):
 
-        quarterWidth = SCREEN_WIDTH / 4
-        pixelsX = quarterWidth
-        pixelsY = SCREEN_HEIGHT / 2
+        quarter_width = SCREEN_WIDTH / 4
+        pixels_x = quarter_width
+        pixels_y = SCREEN_HEIGHT / 2
         radius = 40
 
-        return Paddle(RED, pixelsX, pixelsY, radius)
+        return Paddle(RED, pixels_x, pixels_y, radius)
 
     def _create_paddle_blue(self):
 
-        quarterWidth = SCREEN_WIDTH / 4
-        pixelsX = quarterWidth * 3
-        pixelsY = SCREEN_HEIGHT / 2
+        quarter_width = SCREEN_WIDTH / 4
+        pixels_x = quarter_width * 3
+        pixels_y = SCREEN_HEIGHT / 2
         radius = 40
-        return Paddle(BLUE, pixelsX, pixelsY, radius)
+        return Paddle(BLUE, pixels_x, pixels_y, radius)
 
     def _create_puck(self):
 
-        quarterWidth = SCREEN_WIDTH / 4
-        pixelsX = quarterWidth * 2
-        pixelsY = SCREEN_HEIGHT / 2
+        quarter_width = SCREEN_WIDTH / 4
+        pixels_x = quarter_width * 2
+        pixels_y = SCREEN_HEIGHT / 2
         radius = 30
-        return Puck(BLACK, pixelsX, pixelsY, radius)
+        return Puck(BLACK, pixels_x, pixels_y, radius)
     
-    def updateField(self, keys: pygame.key):
+    def update_field(self, keys: pygame.key):
 
         self.puck.update()
 
-        redPrevPos = self.paddleRed.getPosition()
-        bluePrevPos = self.paddleBlue.getPosition()
+        red_prev_pos = self.paddleRed.get_position()
+        blue_prev_pos = self.paddleBlue.get_position()
 
         if keys[K_UP]:
-            self.paddleBlue.updatePosition(0, -1)  # blue moves up
+            self.paddleBlue.update_position(0, -1)  # blue moves up
         if keys[K_DOWN]:
-            self.paddleBlue.updatePosition(0, 1)   # blue moves down
+            self.paddleBlue.update_position(0, 1)   # blue moves down
         if keys[K_LEFT]:
-            self.paddleBlue.updatePosition(-1, 0)  # blue moves left
+            self.paddleBlue.update_position(-1, 0)  # blue moves left
         if keys[K_RIGHT]:
-            self.paddleBlue.updatePosition(1, 0)   # blue moves right
+            self.paddleBlue.update_position(1, 0)   # blue moves right
         if keys[K_w]:
-            self.paddleRed.updatePosition(0, -1)   # red moves up
+            self.paddleRed.update_position(0, -1)   # red moves up
         if keys[K_s]:
-            self.paddleRed.updatePosition(0, 1)    # red moves down
+            self.paddleRed.update_position(0, 1)    # red moves down
         if keys[K_a]:
-            self.paddleRed.updatePosition(-1, 0)   # red moves left
+            self.paddleRed.update_position(-1, 0)   # red moves left
         if keys[K_d]:
-            self.paddleRed.updatePosition(1, 0)    # red moves right
+            self.paddleRed.update_position(1, 0)    # red moves right
 
         self.check_paddle_boundaries()
         self.check_puck_boundaries()
 
-        self.paddleRed.set_is_moving(redPrevPos)
-        self.paddleBlue.set_is_moving(bluePrevPos)
+        self.paddleRed.set_is_moving(red_prev_pos)
+        self.paddleBlue.set_is_moving(blue_prev_pos)
         
         if pygame.sprite.collide_circle(self.paddleRed, self.puck):
             if self.paddleRed.is_moving():
                 print("red is moving")
-                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
-                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
             else:
                 print("red is stationary")
-                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
-                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
         
-        if pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
+        elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
             if self.paddleBlue.is_moving():
                 print("blue is moving")
-                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
-                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
             else:
                 print("blue is stationary")
-                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
-                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
 
     
-    def drawField(self):
+    def draw_field(self):
         
         # create a green playing field
         self.screen.fill(WHITE)
@@ -137,37 +129,37 @@ class Game:
 
     def check_puck_boundaries(self):
 
-        if self.puck.getPosY() + self.puck.getRadius() > SCREEN_HEIGHT:   # hit bottom of field
+        if self.puck.get_y() + self.puck.get_radius() > SCREEN_HEIGHT:   # hit bottom of field
             self.puck.bounce(360)
-        elif self.puck.getPosY() - self.puck.getRadius() < 0: # hit top of field
+        elif self.puck.get_y() - self.puck.get_radius() < 0: # hit top of field
             self.puck.bounce(360)
-        elif self.puck.getPosX() - self.puck.getRadius() < 0:   # hit left side of field
+        elif self.puck.get_x() - self.puck.get_radius() < 0:   # hit left side of field
             self.puck.bounce(180)
-        elif self.puck.getPosX() + self.puck.getRadius() > SCREEN_WIDTH:  # hit right side of field
+        elif self.puck.get_x() + self.puck.get_radius() > SCREEN_WIDTH:  # hit right side of field
             self.puck.bounce(180)
 
     def check_paddle_boundaries(self):
         
         # don't let self.paddleRed go too far up or down
-        if self.paddleRed.getPosY() + self.paddleRed.getRadius() > SCREEN_HEIGHT:
-            self.paddleRed.pos.setY(SCREEN_HEIGHT - self.paddleRed.getRadius())
-        elif self.paddleRed.getPosY() - self.paddleRed.getRadius() < 0:
-            self.paddleRed.pos.setY(0 + self.paddleRed.getRadius())
+        if self.paddleRed.get_y() + self.paddleRed.get_radius() > SCREEN_HEIGHT:
+            self.paddleRed.pos.set_y(SCREEN_HEIGHT - self.paddleRed.get_radius())
+        elif self.paddleRed.get_y() - self.paddleRed.get_radius() < 0:
+            self.paddleRed.pos.set_y(0 + self.paddleRed.get_radius())
 
         # don't let self.paddleRed got too far to the left, or past the midpoint of the screen
-        if self.paddleRed.getPosX() - self.paddleRed.getRadius() < 0:
-            self.paddleRed.pos.setX(0 + self.paddleRed.getRadius())
-        elif self.paddleRed.getPosX() + self.paddleRed.getRadius() > SCREEN_WIDTH // 2:
-            self.paddleRed.pos.setX((SCREEN_WIDTH // 2) - self.paddleRed.getRadius())
+        if self.paddleRed.get_x() - self.paddleRed.get_radius() < 0:
+            self.paddleRed.pos.set_x(0 + self.paddleRed.get_radius())
+        elif self.paddleRed.get_x() + self.paddleRed.get_radius() > SCREEN_WIDTH // 2:
+            self.paddleRed.pos.set_x((SCREEN_WIDTH // 2) - self.paddleRed.get_radius())
 
         # don't let self.paddleBlue go too far up or down
-        if self.paddleBlue.getPosY() + self.paddleBlue.getRadius() > SCREEN_HEIGHT:
-            self.paddleBlue.pos.setY(SCREEN_HEIGHT - self.paddleBlue.getRadius())
-        elif self.paddleBlue.getPosY() - self.paddleBlue.getRadius() < 0:
-            self.paddleBlue.pos.setY(0 + self.paddleBlue.getRadius())
+        if self.paddleBlue.get_y() + self.paddleBlue.get_radius() > SCREEN_HEIGHT:
+            self.paddleBlue.pos.set_y(SCREEN_HEIGHT - self.paddleBlue.get_radius())
+        elif self.paddleBlue.get_y() - self.paddleBlue.get_radius() < 0:
+            self.paddleBlue.pos.set_y(0 + self.paddleBlue.get_radius())
 
         # don't let self.paddleBlue got too far to the right, or past the midpoint of the screen
-        if self.paddleBlue.getPosX() + self.paddleBlue.getRadius() > SCREEN_WIDTH:
-            self.paddleBlue.pos.setX(SCREEN_WIDTH - self.paddleBlue.getRadius())
-        elif self.paddleBlue.getPosX() - self.paddleBlue.getRadius() < SCREEN_WIDTH // 2:
-            self.paddleBlue.pos.setX((SCREEN_WIDTH // 2) + self.paddleBlue.getRadius())
+        if self.paddleBlue.get_x() + self.paddleBlue.get_radius() > SCREEN_WIDTH:
+            self.paddleBlue.pos.set_x(SCREEN_WIDTH - self.paddleBlue.get_radius())
+        elif self.paddleBlue.get_x() - self.paddleBlue.get_radius() < SCREEN_WIDTH // 2:
+            self.paddleBlue.pos.set_x((SCREEN_WIDTH // 2) + self.paddleBlue.get_radius())

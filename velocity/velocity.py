@@ -5,7 +5,7 @@ class Velocity:
     def __init__(self, speed = None):
         # set velocity movemement in random direction
         angle = random.uniform(0, 360)
-        self.travelAngle = angle
+        self.travel_angle = angle
 
         if speed == None:
             self.speed = 0.3
@@ -16,33 +16,41 @@ class Velocity:
         self.dx = self.speed * math.cos(angle_radians)
         self.dy = self.speed * math.sin(angle_radians)
 
-    def getDX(self):
+    def get_dx(self):
         return self.dx
     
-    def getDY(self):
+    def get_dy(self):
         return self.dy
     
-    def getTravelAngle(self):
-        return self.travelAngle
+    def get_travel_angle(self):
+        return self.travel_angle
     
-    def setDX(self, pixelsDX):
+    def set_dx(self, pixelsDX):
         self.dx = pixelsDX
 
-    def setDY(self, pixelsDY):
+    def set_dy(self, pixelsDY):
         self.dy = pixelsDY
     
-    def setTravelAngle(self, angle):
-        self.travelAngle = angle
+    def set_travel_angle(self, angle):
+        self.travel_angle = angle
 
-    def getVelocity(self):
+    def increase_velocity(self, speedIncrease):
+        self.speed += speedIncrease
+
+    def get_velocity(self):
         return self.dx, self.dy
     
-    def switchVelocity(self, minuend):
+    def update_velocity(self):
+        angle_radians = math.radians(self.travel_angle)
+        # calculate new velocity
+        self.dx = self.speed * math.cos(angle_radians) 
+        self.dy = self.speed * math.sin(angle_radians) 
 
-        # reassign travel angle to the angle mirroring the current travel angle
-        self.travelAngle = minuend - self.getTravelAngle()
-        angle_radians = math.radians(self.travelAngle)
-        dx = self.speed * math.cos(angle_radians) 
-        dy = self.speed * math.sin(angle_radians) 
-        self.dx = dx
-        self.dy = dy 
+    # reassign travel angle to the angle mirroring the current travel angle
+    def update_travel_angle(self, minuend):
+        self.travel_angle = minuend - self.get_travel_angle()
+        #self.travel_angle = (self.travel_angle+ 180) % 360
+    
+
+
+    

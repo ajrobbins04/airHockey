@@ -1,29 +1,29 @@
 class Position:
-    def __init__(self, pixelsX, pixelsY):
-        self.x = pixelsX
-        self.y = pixelsY
+    def __init__(self, pixels_x, pixels_y):
+        self.x = pixels_x
+        self.y = pixels_y
 
-    def getX(self):
+    def get_x(self):
         return self.x
     
-    def getY(self):
+    def get_y(self):
         return self.y
     
-    def addX(self, pixelsX):
-        self.x += pixelsX
+    def add_x(self, pixels_x):
+        self.x += pixels_x
 
-    def addY(self, pixelsY):
-        self.y += pixelsY
+    def add_y(self, pixels_y):
+        self.y += pixels_y
 
-    def setX(self, pixelsX):
-        self.x = pixelsX
+    def set_x(self, pixels_x):
+        self.x = pixels_x
 
-    def setY(self, pixelsY):
-        self.y = pixelsY
+    def set_y(self, pixels_y):
+        self.y = pixels_y
 
-    def updatePos(self, pixelsX, pixelsY):
-        self.addX(pixelsX)
-        self.addY(pixelsY)
+    def update_pos(self, pixels_x, pixels_y):
+        self.add_x(pixels_x)
+        self.add_y(pixels_y)
 
-    def getPosition(self):
+    def get_position(self):
         return self.x, self.y

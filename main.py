@@ -13,7 +13,7 @@ from pygame.locals import (
 
 game = Game()
 
-def gameLoop(game: Game):
+def game_loop(game: Game):
 
     running = True
 
@@ -40,8 +40,8 @@ def gameLoop(game: Game):
         keys = pygame.key.get_pressed()
 
         # update field based on keys pressed and draw the resulting field
-        game.updateField(keys)
-        game.drawField()
+        game.update_field(keys)
+        game.draw_field()
 
         # updates appearance of the entire screen
         pygame.display.flip()
@@ -50,4 +50,4 @@ def gameLoop(game: Game):
     pygame.quit()
 
 
-gameLoop(game)
+game_loop(game)
