@@ -31,12 +31,14 @@ def gameLoop(game: Game):
                     
             elif event.type == QUIT:
                 running = False
+            else:
+                game.paddleRed.set_is_moving(False)
+                game.paddleBlue.set_is_moving(False)
 
         # returns a dictionary of the keys that were pressed
         keys = pygame.key.get_pressed()
 
         game.updateField(keys)
-
         game.drawField()
 
         # updates appearance of the entire screen

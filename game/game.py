@@ -62,6 +62,9 @@ class Game:
 
         self.puck.move()
 
+        redPrevPos = self.paddleRed.getPosition()
+        bluePrevPos = self.paddleBlue.getPosition()
+
         if keys[K_UP]:
             self.paddleBlue.updatePosition(0, -1)  # blue moves up
         if keys[K_DOWN]:
@@ -81,10 +84,29 @@ class Game:
 
         self.check_paddle_boundaries()
         self.check_puck_boundaries()
+
+        self.paddleRed.set_is_moving(redPrevPos)
+        self.paddleBlue.set_is_moving(bluePrevPos)
+        
         if pygame.sprite.collide_circle(self.paddleRed, self.puck):
-            print("Collision with red")
-        if pygame.sprite.collide_circle(self.paddleBlue, self.puck):
-            print("Collision with blue")
+            if self.paddleRed.is_moving():
+                print("red is moving")
+                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
+                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
+            else:
+                print("red is stationary")
+                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
+                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
+        
+        if pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
+            if self.paddleBlue.is_moving():
+                print("blue is moving")
+                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
+                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
+            else:
+                print("blue is stationary")
+                self.puck.velocity.setDX(self.puck.velocity.getDX() * -1)
+                self.puck.velocity.setDY(self.puck.velocity.getDY() * -1)
 
     
     def drawField(self):
@@ -102,11 +124,11 @@ class Game:
 
         # left goal box
         pygame.draw.rect(self.screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2) 
-        pygame.draw.line(self.screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2), (0, ((SCREEN_HEIGHT - box_height) // 2)* 2.5), 4) 
+        pygame.draw.line(self.screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2), (0, ((SCREEN_HEIGHT - box_height) // 2)* 2.5), 6) 
 
         # right goal box
         pygame.draw.rect(self.screen, BLACK, (SCREEN_WIDTH - box_width, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2)  
-        pygame.draw.line(self.screen, BLACK, (SCREEN_WIDTH - 2, (SCREEN_HEIGHT - box_height) // 2), (SCREEN_WIDTH - 2, ((SCREEN_HEIGHT - box_height) // 2) + box_height), 4) 
+        pygame.draw.line(self.screen, BLACK, (SCREEN_WIDTH - 2, (SCREEN_HEIGHT - box_height) // 2), (SCREEN_WIDTH - 2, ((SCREEN_HEIGHT - box_height) // 2) + box_height), 6) 
 
         # a red paddle, a blue paddle, and a black self.puck
         self.paddleRed.draw_field_obj(self.screen)
