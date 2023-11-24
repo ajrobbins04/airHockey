@@ -9,24 +9,24 @@ class Paddle(FieldObject):
         super().__init__(color, pixels_x, pixels_y, radius)
 
         # paddle is initially stationary
-        self.is_moving = False
+        self.moving = False
 
-    def set_is_moving(self, prev_pos: Position = None, is_moving: bool = None):
+    def set_is_moving(self, prev_pos: Position = None, moving: bool = None):
 
         # value of is_moving is determined by paddle's 
         # current and previous positions
         if prev_pos is not None:
             currPos = self.get_position()
             if prev_pos != currPos:
-                self.is_moving = True
+                self.moving = True
             else:
-                self.is_moving = False
+                self.moving = False
         # or, the specified value is assigned to is_moving
-        elif is_moving is not None:
-            self.is_moving = is_moving
+        elif moving is not None:
+            self.moving = moving
 
     def is_moving(self):
-        return self.is_moving
+        return self.moving
 
     def calc_motion(self):
-        return self.is_moving
+        return self.moving
