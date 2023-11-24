@@ -31,6 +31,7 @@ def gameLoop(game: Game):
                     
             elif event.type == QUIT:
                 running = False
+            # neither paddle is moving if KEYDOWN event not triggered
             else:
                 game.paddleRed.set_is_moving(False)
                 game.paddleBlue.set_is_moving(False)
@@ -38,6 +39,7 @@ def gameLoop(game: Game):
         # returns a dictionary of the keys that were pressed
         keys = pygame.key.get_pressed()
 
+        # update field based on keys pressed and draw the resulting field
         game.updateField(keys)
         game.drawField()
 

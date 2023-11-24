@@ -2,13 +2,17 @@ import math
 import random
 
 class Velocity:
-    def __init__(self):
+    def __init__(self, speed = None):
+        # set velocity movemement in random direction
         angle = random.uniform(0, 360)
         self.travelAngle = angle
 
-        angle_radians = math.radians(angle)
-        self.speed = 0.3
+        if speed == None:
+            self.speed = 0.3
+        else:
+            self.speed = speed
         
+        angle_radians = math.radians(angle)
         self.dx = self.speed * math.cos(angle_radians)
         self.dy = self.speed * math.sin(angle_radians)
 
@@ -33,9 +37,9 @@ class Velocity:
     def getVelocity(self):
         return self.dx, self.dy
     
-    def reverseVelocity(self, minuend):
-      #  self.dx = self.getDX() * -1
-      #  self.dy = self.getDY() * -1
+    def switchVelocity(self, minuend):
+
+        # reassign travel angle to the angle mirroring the current travel angle
         self.travelAngle = minuend - self.getTravelAngle()
         angle_radians = math.radians(self.travelAngle)
         dx = self.speed * math.cos(angle_radians) 

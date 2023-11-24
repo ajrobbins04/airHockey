@@ -50,6 +50,8 @@ class FieldObject(pygame.sprite.Sprite):
         self.pos.updatePos(pixelsX, pixelsY)
         self.updateRect()
     
+    # rect.center must contain current position of
+    # sprite for collision detection
     def updateRect(self):
         self.rect.center = self.getPosition()
 

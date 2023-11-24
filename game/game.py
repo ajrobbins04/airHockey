@@ -60,7 +60,7 @@ class Game:
     
     def updateField(self, keys: pygame.key):
 
-        self.puck.move()
+        self.puck.update()
 
         redPrevPos = self.paddleRed.getPosition()
         bluePrevPos = self.paddleBlue.getPosition()
