@@ -10,20 +10,21 @@ class Paddle(FieldObject):
 
         # paddle is initially stationary
         self.moving = False
+        self.prev_positions = []
 
-    def set_is_moving(self, prev_pos: Position = None, moving: bool = None):
+    def track_movement(self):
+        if self.moving == True:
+            self.prev_positions.append(Position(self.pos.get_x(), self.pos.get_y()))
+     
+    def begin_track_movement(self):
+        self.moving = True
+        self.prev_positions.append(Position(self.pos.get_x(), self.pos.get_y()))
 
-        # value of is_moving is determined by paddle's 
-        # current and previous positions
-        if prev_pos is not None:
-            currPos = self.get_position()
-            if prev_pos != currPos:
-                self.moving = True
-            else:
-                self.moving = False
-        # or, the specified value is assigned to is_moving
-        elif moving is not None:
-            self.moving = moving
+    def end_track_movement(self):
+        pos1 = self.prev_positions[0]
+        pos2 = self.prev_positions.pop()
+        self.moving = False
+        self.prev_positions.clear()
 
     def is_moving(self):
         return self.moving

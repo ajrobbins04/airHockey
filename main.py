@@ -8,6 +8,7 @@ from pygame.locals import (
     K_SPACE,
     K_ESCAPE,
     KEYDOWN,
+    KEYUP,
     QUIT,     # triggered when user closes window
 )
 
@@ -28,13 +29,20 @@ def game_loop(game: Game):
                     running = False
                 elif event.key == K_SPACE:
                     pause = True
+                elif event.key in game.redKeys:
+                    game.paddleRed.begin_track_movement()
+                elif event.key in game.blueKeys:
+                    game.paddleBlue.begin_track_movement()
                     
             elif event.type == QUIT:
                 running = False
-            # neither paddle is moving if KEYDOWN event wasn't triggered
-            else:
-                game.paddleRed.set_is_moving(False)
-                game.paddleBlue.set_is_moving(False)
+           
+            # releasing a key stops movement
+            elif event.type == KEYUP:
+                if event.key in game.redKeys:
+                    game.paddleRed.end_track_movement()
+                elif event.key in game.blueKeys:
+                    game.paddleBlue.end_track_movement()
 
         # returns a dictionary of the keys that were pressed
         keys = pygame.key.get_pressed()
