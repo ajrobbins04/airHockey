@@ -26,9 +26,16 @@ class Puck(FieldObject):
         # add friction to speed
        # self.velocity.speed *= 0.99
 
-    # current angle of travel is subtracted from the minuend
-    # to find new angle of travel
-    def bounce(self, minuend): 
-        self.velocity.update_travel_angle(minuend) 
+    # occurs when puck collides with a boundary
+    def boundary_bounce(self, minuend): 
+        # current angle of travel is subtracted from the minuend
+        # to find new angle of travel
+        self.velocity.mirror_travel_angle(minuend) 
+        self.velocity.update_velocity()
+        self.update()
+
+    # occurs when puck collides with a paddle
+    def paddle_bounce(self):
+        self.velocity.opposite_travel_angle()
         self.velocity.update_velocity()
         self.update()

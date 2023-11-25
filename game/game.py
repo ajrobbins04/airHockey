@@ -93,12 +93,14 @@ class Game:
                 print("red is moving")
             else:
                 print("red is stationary")
+                self.puck.paddle_bounce()
         
         elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
             if self.paddleBlue.is_moving() == True:
                 print("blue is moving")
             else:
                 print("blue is stationary")
+                self.puck.paddle_bounce()
 
     
     def draw_field(self):
@@ -130,13 +132,13 @@ class Game:
     def check_puck_boundaries(self):
 
         if self.puck.get_y() + self.puck.get_radius() > SCREEN_HEIGHT:   # hit bottom of field
-            self.puck.bounce(360)
+            self.puck.boundary_bounce(360)
         elif self.puck.get_y() - self.puck.get_radius() < 0: # hit top of field
-            self.puck.bounce(360)
+            self.puck.boundary_bounce(360)
         elif self.puck.get_x() - self.puck.get_radius() < 0:   # hit left side of field
-            self.puck.bounce(180)
+            self.puck.boundary_bounce(180)
         elif self.puck.get_x() + self.puck.get_radius() > SCREEN_WIDTH:  # hit right side of field
-            self.puck.bounce(180)
+            self.puck.boundary_bounce(180)
 
     def check_paddle_boundaries(self):
         

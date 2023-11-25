@@ -47,9 +47,13 @@ class Velocity:
         self.dy = self.speed * math.sin(angle_radians) 
 
     # reassign travel angle to the angle mirroring the current travel angle
-    def update_travel_angle(self, minuend):
+    def mirror_travel_angle(self, minuend):
         self.travel_angle = minuend - self.get_travel_angle()
-        #self.travel_angle = (self.travel_angle+ 180) % 360
+
+    # reassign travel angle to the angle opposite the current travel angle
+    def opposite_travel_angle(self):
+        self.travel_angle = (self.travel_angle+ 180) % 360
+
     
 
 
