@@ -31,7 +31,7 @@ def game_loop(game: Game):
                     
             elif event.type == QUIT:
                 running = False
-            # neither paddle is moving if KEYDOWN event not triggered
+            # neither paddle is moving if KEYDOWN event wasn't triggered
             else:
                 game.paddleRed.set_is_moving(False)
                 game.paddleBlue.set_is_moving(False)

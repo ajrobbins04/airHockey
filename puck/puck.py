@@ -27,15 +27,17 @@ class Puck(FieldObject):
        # self.velocity.speed *= 0.99
 
     # occurs when puck collides with a boundary
-    def boundary_bounce(self, minuend): 
+    def bounce_off_boundary(self, minuend): 
         # current angle of travel is subtracted from the minuend
         # to find new angle of travel
-        self.velocity.mirror_travel_angle(minuend) 
+        angle = self.velocity.direction.get_angle_mirror(minuend)
+        self.velocity.update_direction(angle)
         self.velocity.update_velocity()
         self.update()
 
     # occurs when puck collides with a paddle
-    def paddle_bounce(self):
-        self.velocity.opposite_travel_angle()
+    def bounce_off_paddle(self):
+        angle = self.velocity.direction.get_angle_opposite()
+        self.velocity.update_direction(angle)
         self.velocity.update_velocity()
         self.update()
