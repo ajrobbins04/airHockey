@@ -3,6 +3,7 @@ pygame.init()
 
 from fieldObject.fieldObject import FieldObject
 from position.position import Position
+from angle.angle import Angle
 
 class Paddle(FieldObject):
     def __init__(self, color, pixels_x, pixels_y, radius):
@@ -21,13 +22,28 @@ class Paddle(FieldObject):
         self.prev_positions.append(Position(self.pos.get_x(), self.pos.get_y()))
 
     def end_track_movement(self):
-        pos1 = self.prev_positions[0]
-        pos2 = self.prev_positions.pop()
         self.moving = False
         self.prev_positions.clear()
 
     def is_moving(self):
         return self.moving
 
+    # calculates the angle in which the paddle is moving
     def calc_motion(self):
-        return self.moving
+        
+        angle_degrees = 0
+
+        if self.prev_positions:
+            pos_start: Position = self.prev_positions[0]
+            pos_end: Position = self.prev_positions[-1]
+
+            x1 = pos_start.get_x()
+            y1 = pos_start.get_y()
+            x2 = pos_end.get_x()
+            y2 = pos_end.get_y()
+
+            # Calculate the angle of the path
+            angle_degrees = Angle.calc_angle(x1, y1, x2, y2)
+
+        # returns direction 
+        return angle_degrees

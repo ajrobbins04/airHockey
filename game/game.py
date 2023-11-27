@@ -95,6 +95,7 @@ class Game:
         if pygame.sprite.collide_circle(self.paddleRed, self.puck):
             if self.paddleRed.is_moving() == True:
                 print("red is moving")
+                self.puck.bounce_off_moving_paddle(self.paddleRed)
             else:
                 print("red is stationary")
                 self.puck.bounce_off_paddle()
@@ -102,6 +103,7 @@ class Game:
         elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
             if self.paddleBlue.is_moving() == True:
                 print("blue is moving")
+                self.puck.bounce_off_moving_paddle(self.paddleBlue)
             else:
                 print("blue is stationary")
                 self.puck.bounce_off_paddle()

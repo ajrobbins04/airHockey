@@ -3,6 +3,7 @@ pygame.init()
 
 from fieldObject.fieldObject import FieldObject
 from velocity.velocity import Velocity
+from paddle.paddle import Paddle
 
 class Puck(FieldObject):
     def __init__(self, color, pixelsX, pixelsY, radius):
@@ -35,9 +36,19 @@ class Puck(FieldObject):
         self.velocity.update_velocity()
         self.update()
 
-    # occurs when puck collides with a paddle
+    # occurs when puck collides with a stationary paddle
     def bounce_off_paddle(self):
         angle = self.velocity.direction.get_angle_opposite()
         self.velocity.update_direction(angle)
         self.velocity.update_velocity()
         self.update()
+
+    # occurs when puck collides with a moving paddle
+    def bounce_off_moving_paddle(self, paddle: Paddle):
+    
+        # use change in paddle position to ascertain its direction
+        angle = paddle.calc_motion()
+        # give puck same motion as paddle upon collision
+        self.velocity.update_direction(angle)
+        speedIncrease = 0.05
+        self.velocity.update_velocity(speedIncrease)

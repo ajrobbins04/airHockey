@@ -37,15 +37,21 @@ class Velocity:
 
     def get_velocity(self):
         return self.dx, self.dy
-    
+
     def update_direction(self, angle_degrees):
-        self.direction.set_angle(angle_degrees)
+        self.direction.set_direction(angle_degrees)
     
     # calculate new velocity
-    def update_velocity(self):
-        self.dx = self.speed * self.direction.get_x_direction()
-        self.dy = self.speed * self.direction.get_y_direction()
-
+    def update_velocity(self, speedIncrease = None):
+        # collision occurred w/a stationary object
+        if speedIncrease is None:
+            self.dx = self.speed * self.direction.get_x_direction()
+            self.dy = self.speed * self.direction.get_y_direction()
+        else:
+            # increase speed from moving paddle collision
+            self.speed = self.speed + speedIncrease
+            self.dx = self.speed + speedIncrease * self.direction.get_x_direction()
+            self.dy = self.speed * self.direction.get_y_direction()
 
     
 
