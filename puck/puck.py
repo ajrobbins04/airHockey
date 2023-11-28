@@ -21,20 +21,36 @@ class Puck(FieldObject):
         self.pos.add_x(self.velocity.get_dx() * time_passed)
         self.pos.add_y(self.velocity.get_dy() * time_passed)
 
+        # bounce if new position out of bounds
+        if self.past_top_bottom() == True:
+            self.bounce_off_boundary(360, time_passed)
+        elif self.past_left_right() == True:
+            self.bounce_off_boundary(180, time_passed)
+
         # reassigns rect.center to updated position
         self.update_rect()
 
         # velocity gradually decreases due to friction
         self.velocity.add_friction()
 
+    def past_top_bottom(self):
+        if self.hit_top_window() or self.hit_bottom_window():
+            return True
+        return False
+    
+    def past_left_right(self):
+        if self.hit_left_window or self.hit_right_window():
+            return True
+        return False
+
     # occurs when puck collides with a boundary
-    def bounce_off_boundary(self, minuend): 
+    def bounce_off_boundary(self, minuend, time_passed): 
         # current angle of travel is subtracted from the minuend
         # to find new angle of travel
         angle = self.velocity.get_direction_angle_mirror(minuend)
         self.velocity.update_direction(angle)
         self.velocity.update_velocity()
-        self.update()
+        
 
     # occurs when puck collides with a stationary paddle
     def bounce_off_paddle(self):

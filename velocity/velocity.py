@@ -45,9 +45,9 @@ class Velocity:
     # calculate new velocity
     def update_velocity(self):
         # dx = speed * cos(direction in radians)
-        self.dx = self._speed * self._direction.get_x_direction()
+        self._dx = self._speed * self._direction.get_x_direction()
         # dy = speed * sin(direction in radians)
-        self.dy = self._speed * self._direction.get_y_direction()
+        self._dy = self._speed * self._direction.get_y_direction()
 
 
 

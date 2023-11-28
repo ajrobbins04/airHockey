@@ -13,7 +13,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 # moves in pixels per second
-PUCK_START_SPEED = 150
+PUCK_START_SPEED = 250
 PUCK_MAX_SPEED = 300
 
 FRICTION = 0.99

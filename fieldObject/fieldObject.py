@@ -1,8 +1,8 @@
 import pygame
 pygame.init()
 
-
 from position.position import Position
+from constants.constants import *
 
 # Define a Player object by extending pygame's Sprite
 # The surface drawn on the screen is now an attribute of 'player'
@@ -56,4 +56,16 @@ class FieldObject(pygame.sprite.Sprite):
         self.rect.center = self.get_position()
 
     def draw_field_obj(self, screen: pygame.Surface):
-        pygame.draw.circle(screen, self.get_color(), self.get_position(), self.get_radius())  
+        pygame.draw.circle(screen, self.get_color(), self.get_position(), self.get_radius()) 
+
+    def hit_top_window(self):
+        return self.get_y() - self.get_radius() <= 0
+    
+    def hit_bottom_window(self):
+        return self.get_y() + self.get_radius() >= SCREEN_HEIGHT
+    
+    def hit_left_window(self):
+        return self.get_x() - self.get_radius() <= 0
+
+    def hit_right_window(self):
+        return self.get_x() + self.get_radius() >= SCREEN_WIDTH
