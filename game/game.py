@@ -3,17 +3,9 @@ pygame.init()
 
 from paddle.paddle import Paddle
 from puck.puck import Puck
+from constants.constants import *
 
-# measured in pixels
-SCREEN_WIDTH = 1400
-SCREEN_HEIGHT = 700
-
-RED = (255,0,0)
-BLUE = (0,0,205)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-
-# import keys to handle events
+# import pressed_keys to handle events
 from pygame.locals import(
     K_UP,
     K_DOWN,
@@ -33,6 +25,7 @@ class Game:
         self.screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
         self.blueKeys = {K_UP, K_DOWN, K_LEFT, K_RIGHT}
         self.redKeys = {K_w, K_s, K_a, K_d}
+        self.clock = pygame.time.Clock()
 
  
     def _create_paddle_red(self):
@@ -60,25 +53,28 @@ class Game:
         radius = 30
         return Puck(BLACK, pixels_x, pixels_y, radius)
     
-    def update_field(self, keys: pygame.key):
+    def update(self, pressed_keys: pygame.key):
+       
+        frame_rate = self.clock.tick(60)
+        time_passed = frame_rate/1000
 
-        self.puck.update()
+        self.puck.move(time_passed)
 
-        if keys[K_UP]:
+        if pressed_keys[K_UP]:
             self.paddleBlue.update_position(0, -1)  # blue moves up
-        if keys[K_DOWN]:
+        if pressed_keys[K_DOWN]:
             self.paddleBlue.update_position(0, 1)   # blue moves down
-        if keys[K_LEFT]:
+        if pressed_keys[K_LEFT]:
             self.paddleBlue.update_position(-1, 0)  # blue moves left
-        if keys[K_RIGHT]:
+        if pressed_keys[K_RIGHT]:
             self.paddleBlue.update_position(1, 0)   # blue moves right
-        if keys[K_w]:
+        if pressed_keys[K_w]:
             self.paddleRed.update_position(0, -1)   # red moves up
-        if keys[K_s]:
+        if pressed_keys[K_s]:
             self.paddleRed.update_position(0, 1)    # red moves down
-        if keys[K_a]:
+        if pressed_keys[K_a]:
             self.paddleRed.update_position(-1, 0)   # red moves left
-        if keys[K_d]:
+        if pressed_keys[K_d]:
             self.paddleRed.update_position(1, 0)    # red moves right
 
         self.check_paddle_boundaries()
@@ -89,23 +85,19 @@ class Game:
 
         self.check_collisions()
       
-
+    
     def check_collisions(self):
           
         if pygame.sprite.collide_circle(self.paddleRed, self.puck):
             if self.paddleRed.is_moving() == True:
-                print("red is moving")
                 self.puck.bounce_off_moving_paddle(self.paddleRed)
             else:
-                print("red is stationary")
                 self.puck.bounce_off_paddle()
         
         elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
             if self.paddleBlue.is_moving() == True:
-                print("blue is moving")
                 self.puck.bounce_off_moving_paddle(self.paddleBlue)
             else:
-                print("blue is stationary")
                 self.puck.bounce_off_paddle()
 
     def draw_field(self):
@@ -117,17 +109,13 @@ class Game:
         pygame.draw.line(self.screen, BLACK, (SCREEN_WIDTH // 2, 5), (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 3), 2)  # center line
         pygame.draw.circle(self.screen, BLACK, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 100, 2)                  # center circle
 
-        # goal box dimensions
-        box_width = 150
-        box_height = 300
-
         # left goal box
-        pygame.draw.rect(self.screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2) 
-        pygame.draw.line(self.screen, BLACK, (0, (SCREEN_HEIGHT - box_height) // 2), (0, ((SCREEN_HEIGHT - box_height) // 2)* 2.5), 6) 
+        pygame.draw.rect(self.screen, BLACK, (0, (SCREEN_HEIGHT - BOX_HEIGHT) // 2, BOX_WIDTH, BOX_HEIGHT), 2) 
+        pygame.draw.line(self.screen, BLACK, (0, (SCREEN_HEIGHT - BOX_HEIGHT) // 2), (0, ((SCREEN_HEIGHT - BOX_HEIGHT) // 2)* 2.5), 6) 
 
         # right goal box
-        pygame.draw.rect(self.screen, BLACK, (SCREEN_WIDTH - box_width, (SCREEN_HEIGHT - box_height) // 2, box_width, box_height), 2)  
-        pygame.draw.line(self.screen, BLACK, (SCREEN_WIDTH - 2, (SCREEN_HEIGHT - box_height) // 2), (SCREEN_WIDTH - 2, ((SCREEN_HEIGHT - box_height) // 2) + box_height), 6) 
+        pygame.draw.rect(self.screen, BLACK, (SCREEN_WIDTH - BOX_WIDTH, (SCREEN_HEIGHT - BOX_HEIGHT) // 2, BOX_WIDTH, BOX_HEIGHT), 2)  
+        pygame.draw.line(self.screen, BLACK, (SCREEN_WIDTH - 2, (SCREEN_HEIGHT - BOX_HEIGHT) // 2), (SCREEN_WIDTH - 2, ((SCREEN_HEIGHT - BOX_HEIGHT) // 2) + BOX_HEIGHT), 6) 
 
         # a red paddle, a blue paddle, and a black self.puck
         self.paddleRed.draw_field_obj(self.screen)

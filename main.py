@@ -12,10 +12,10 @@ from pygame.locals import (
     QUIT,     # triggered when user closes window
 )
 
-game = Game()
 
-def game_loop(game: Game):
+def game_loop():
 
+    game = Game()
     running = True
 
     while running:
@@ -45,10 +45,10 @@ def game_loop(game: Game):
                     game.paddleBlue.end_track_movement()
 
         # returns a dictionary of the keys that were pressed
-        keys = pygame.key.get_pressed()
+        pressed_keys = pygame.key.get_pressed()
 
         # update field based on keys pressed and draw the resulting field
-        game.update_field(keys)
+        game.update(pressed_keys)
         game.draw_field()
 
         # updates appearance of the entire screen
@@ -58,4 +58,4 @@ def game_loop(game: Game):
     pygame.quit()
 
 
-game_loop(game)
+game_loop()

@@ -15,30 +15,30 @@ class Puck(FieldObject):
         # assign current position to rect.center
         self.update_rect()
 
-    def update(self):
+    def move(self, time_passed):
 
-        # use velocity to assign new position
-        self.pos.add_x(self.velocity.get_dx())
-        self.pos.add_y(self.velocity.get_dy())
+        # new position = position + (velocity * time)
+        self.pos.add_x(self.velocity.get_dx() * time_passed)
+        self.pos.add_y(self.velocity.get_dy() * time_passed)
 
-        # reassigns rect.center to new position
+        # reassigns rect.center to updated position
         self.update_rect()
 
-        # add friction to speed
-       # self.velocity.speed *= 0.99
+        # velocity gradually decreases due to friction
+        self.velocity.add_friction()
 
     # occurs when puck collides with a boundary
     def bounce_off_boundary(self, minuend): 
         # current angle of travel is subtracted from the minuend
         # to find new angle of travel
-        angle = self.velocity.direction.get_angle_mirror(minuend)
+        angle = self.velocity.get_direction_angle_mirror(minuend)
         self.velocity.update_direction(angle)
         self.velocity.update_velocity()
         self.update()
 
     # occurs when puck collides with a stationary paddle
     def bounce_off_paddle(self):
-        angle = self.velocity.direction.get_angle_opposite()
+        angle = self.velocity.get_direction_angle_opposite()
         self.velocity.update_direction(angle)
         self.velocity.update_velocity()
         self.update()
@@ -50,5 +50,6 @@ class Puck(FieldObject):
         angle = paddle.calc_motion()
         # give puck same motion as paddle upon collision
         self.velocity.update_direction(angle)
-        speedIncrease = 0.05
-        self.velocity.update_velocity(speedIncrease)
+        # speeds the puck up 
+        self.velocity.add_momentum()
+        self.velocity.update_velocity()
