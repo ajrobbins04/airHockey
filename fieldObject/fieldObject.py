@@ -58,14 +58,24 @@ class FieldObject(pygame.sprite.Sprite):
     def draw_field_obj(self, screen: pygame.Surface):
         pygame.draw.circle(screen, self.get_color(), self.get_position(), self.get_radius()) 
 
-    def hit_top_window(self):
+    def hit_top(self):
         return self.get_y() - self.get_radius() <= 0
     
-    def hit_bottom_window(self):
+    def hit_bottom(self):
         return self.get_y() + self.get_radius() >= SCREEN_HEIGHT
     
-    def hit_left_window(self):
+    def hit_left(self):
         return self.get_x() - self.get_radius() <= 0
 
-    def hit_right_window(self):
+    def hit_right(self):
         return self.get_x() + self.get_radius() >= SCREEN_WIDTH
+    
+    def hit_top_bottom(self):
+        if self.hit_top() or self.hit_bottom():
+            return True
+        return False
+        
+    def hit_left_right(self):
+        if self.hit_left() or self.hit_right():
+            return True
+        return False

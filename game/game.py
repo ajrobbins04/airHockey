@@ -6,7 +6,7 @@ from puck.puck import Puck
 from constants.constants import *
 
 # import pressed_keys to handle events
-from pygame.locals import(
+from pygame.locals import (
     K_UP,
     K_DOWN,
     K_LEFT,
@@ -23,8 +23,6 @@ class Game:
         self.paddleBlue = self._create_paddle_blue()
         self.puck = self._create_puck()
         self.screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-        self.blueKeys = {K_UP, K_DOWN, K_LEFT, K_RIGHT}
-        self.redKeys = {K_w, K_s, K_a, K_d}
         self.clock = pygame.time.Clock()
 
  
@@ -78,7 +76,8 @@ class Game:
             self.paddleRed.update_position(2, 0)    # red moves right
 
         self.check_paddle_boundaries()
-  
+        self.paddleBlue.move(pressed_keys)
+        self.paddleRed.move(pressed_keys)
 
         self.paddleRed.track_movement()
         self.paddleBlue.track_movement()
