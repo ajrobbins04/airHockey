@@ -17,12 +17,13 @@ from pygame.locals import (
 )
 
 class Paddle(FieldObject):
-    def __init__(self, color, pixels_x, pixels_y, radius, speed):
-        super().__init__(color, pixels_x, pixels_y, radius, speed)
+    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed):
+        super().__init__(color, pixels_x, pixels_y, radius, mass, speed)
 
         # paddle is initially stationary
         self.moving = False
-        self.prev_positions = []
+        self.velocity.set_dx(0)
+        self.velocity.set_dy(0)
 
         self.setup_moves()
 
@@ -63,18 +64,14 @@ class Paddle(FieldObject):
             if key == possible_key:
                 return True
         return False
-    
-    def track_movement(self):
-        if self.moving == True:
-            self.prev_positions.append(Position(self.pos.get_x(), self.pos.get_y()))
-     
+ 
     def begin_track_movement(self):
         self.moving = True
-        self.prev_positions.append(Position(self.pos.get_x(), self.pos.get_y()))
+
 
     def end_track_movement(self):
         self.moving = False
-        self.prev_positions.clear()
+      
 
     def set_moving(self, moving):
         self.moving = moving

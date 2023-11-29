@@ -32,21 +32,21 @@ class Game:
         pixels_x = quarter_width
         pixels_y = SCREEN_HEIGHT / 2
 
-        return Paddle(RED, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_SPEED)
+        return Paddle(RED, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED) 
 
     def _create_paddle_blue(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 3
         pixels_y = SCREEN_HEIGHT / 2
-        return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_SPEED)
+        return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED) 
 
     def _create_puck(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 2
         pixels_y = SCREEN_HEIGHT / 2
-        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_START_SPEED)
+        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED) 
     
     def update(self, pressed_keys: pygame.key):
        
@@ -60,9 +60,6 @@ class Game:
         self.paddleBlue.move(pressed_keys, time_passed)
         self.paddleRed.move(pressed_keys, time_passed)
       
-
-        self.paddleRed.track_movement()
-        self.paddleBlue.track_movement()
 
         self.check_collisions()
       

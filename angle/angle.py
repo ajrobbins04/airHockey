@@ -2,8 +2,8 @@ import math
 import random
 
 class Angle:
-    def __init__(self, speed = None):
-        # set angle in random direction
+    def __init__(self):
+        # set angle for pucks in random direction
         angle = random.uniform(0, 360)
 
         self._angle_degrees = angle

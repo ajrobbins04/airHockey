@@ -5,8 +5,8 @@ from fieldObject.fieldObject import FieldObject
 from paddle.paddle import Paddle
 
 class Puck(FieldObject):
-    def __init__(self, color, pixelsX, pixelsY, radius, speed):
-        super().__init__(color, pixelsX, pixelsY, radius, speed)
+    def __init__(self, color, pixelsX, pixelsY, radius, mass, speed):
+        super().__init__(color, pixelsX, pixelsY, radius, mass, speed)
         pygame.sprite.Sprite.__init__(self) 
 
 
@@ -24,6 +24,7 @@ class Puck(FieldObject):
 
         # reassigns rect.center to updated position
         self.update_rect()
+        print(self.rect.centerx)
 
         # velocity gradually decreases due to friction
         self.velocity.add_friction()

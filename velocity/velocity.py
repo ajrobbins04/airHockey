@@ -12,6 +12,12 @@ class Velocity:
         self._dx = self._speed * self._direction.get_x_direction()
         self._dy = self._speed * self._direction.get_y_direction()
 
+    def set_dx(self, dx):
+        self._dx = dx
+        
+    def set_dy(self, dy):
+        self._dy = dy
+
     def get_dx(self):
         return self._dx
     
