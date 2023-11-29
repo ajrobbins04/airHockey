@@ -42,7 +42,7 @@ class Puck(FieldObject):
         angle = self.velocity.get_direction_angle_opposite()
         self.velocity.update_direction(angle)
         self.velocity.update_velocity()
-        self.update()
+   
 
     # occurs when puck collides with a moving paddle
     def bounce_off_moving_paddle(self, paddle: Paddle):

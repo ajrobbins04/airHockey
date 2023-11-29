@@ -44,6 +44,7 @@ class Paddle(FieldObject):
         
         if self.moving == True:
             self.calc_direction(pressed_keys)
+            self.velocity.update_velocity()
             # new position = position + (velocity * time)
             self.pos.add_x(self.velocity.get_dx() * time_passed)
             self.pos.add_y(self.velocity.get_dy() * time_passed)
@@ -95,19 +96,19 @@ class Paddle(FieldObject):
      
         if up == True:
             if left == True:
-                self.velocity.update_direction(135)
-            elif right == True:
-                self.velocity.update_direction(45)
-            else:
-                self.velocity.update_direction(90)
-                
-        elif down == True:
-            if left == True:
                 self.velocity.update_direction(225)
             elif right == True:
                 self.velocity.update_direction(315)
             else:
                 self.velocity.update_direction(270)
+                
+        elif down == True:
+            if left == True:
+                self.velocity.update_direction(135)
+            elif right == True:
+                self.velocity.update_direction(45)
+            else:
+                self.velocity.update_direction(90)
 
         elif left == True:
             self.velocity.update_direction(180)
