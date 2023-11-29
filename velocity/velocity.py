@@ -33,17 +33,22 @@ class Velocity:
     def get_direction_angle_mirror(self, minuend):
         return self._direction.get_angle_mirror(minuend)
     
-    def add_momentum(self):
+    def speed_up(self):
         self._speed = PUCK_MAX_SPEED
 
     def add_friction(self):
         self._speed *= FRICTION
+
+        # never let puck be stationary
+        if self._speed < PUCK_MIN_SPEED:
+            self._speed = PUCK_MIN_SPEED
 
     def update_direction(self, angle_degrees):
         self._direction.set_direction(angle_degrees)
     
     # calculate new velocity
     def update_velocity(self):
+       
         # dx = speed * cos(direction in radians)
         self._dx = self._speed * self._direction.get_x_direction()
         # dy = speed * sin(direction in radians)

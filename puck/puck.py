@@ -52,5 +52,5 @@ class Puck(FieldObject):
         # give puck same motion as paddle upon collision
         self.velocity.update_direction(angle)
         # speeds the puck up 
-        self.velocity.add_momentum()
+        self.velocity.speed_up()
         self.velocity.update_velocity()

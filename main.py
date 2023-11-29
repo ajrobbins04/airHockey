@@ -27,9 +27,7 @@ def game_loop():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running = False
-                elif event.key == K_SPACE:
-                    pause = True
-     
+          
                 elif event.key in game.paddleBlue.moves.values():
                     game.paddleBlue.set_moving(True)
                 elif event.key in game.paddleRed.moves.values():
