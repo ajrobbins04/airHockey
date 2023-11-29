@@ -17,8 +17,8 @@ from pygame.locals import (
 )
 
 class Paddle(FieldObject):
-    def __init__(self, color, pixels_x, pixels_y, radius):
-        super().__init__(color, pixels_x, pixels_y, radius)
+    def __init__(self, color, pixels_x, pixels_y, radius, speed):
+        super().__init__(color, pixels_x, pixels_y, radius, speed)
 
         # paddle is initially stationary
         self.moving = False
@@ -40,36 +40,29 @@ class Paddle(FieldObject):
 
     # move according to the pressed keys that
     # are also found in the paddle's set of keys
-    def move(self, pressed_keys):
-       
-        if pressed_keys[self.moves["up"]]:
-            if pressed_keys[self.moves["left"]]:
-                angle = 135
-                print("135")
-            elif pressed_keys[self.moves["right"]]:
-                angle = 45
-                print("45")
-            else:
-                angle = 90
-                print("90")
-        elif pressed_keys[self.moves["down"]]:
-            if pressed_keys[self.moves["left"]]:
-                angle = 225
-                print("225")
-            elif pressed_keys[self.moves["right"]]:
-                angle = 315
-                print("315")
-            else:
-                angle = 270
-                print("270")
-        elif pressed_keys[self.moves["left"]]:
-            angle = 180
-            print("180")
-        elif pressed_keys[self.moves["right"]]:
-            angle = 0
-            print("0")
-    
+    def move(self, pressed_keys, time_passed):
+        
+        if self.moving == True:
+            self.calc_direction(pressed_keys)
+            # new position = position + (velocity * time)
+            self.pos.add_x(self.velocity.get_dx() * time_passed)
+            self.pos.add_y(self.velocity.get_dy() * time_passed)
 
+            # check if new position out of bounds
+            
+
+            # reassigns rect.center to updated position
+            self.update_rect()
+
+        
+    # checks if the event key is one of the
+    # possible inputs to move the paddle
+    def in_keys(self, key):
+        for possible_key in self.moves.values():
+            if key == possible_key:
+                return True
+        return False
+    
     def track_movement(self):
         if self.moving == True:
             self.prev_positions.append(Position(self.pos.get_x(), self.pos.get_y()))
@@ -82,10 +75,46 @@ class Paddle(FieldObject):
         self.moving = False
         self.prev_positions.clear()
 
+    def set_moving(self, moving):
+        self.moving = moving
+
     def is_moving(self):
         return self.moving
+    
+    def stop_moving(self):
+        self.moving = False
+        self.angle = 0
 
-    # calculates the angle in which the paddle is moving
+    # determines the angle in which the paddle is moving
+    def calc_direction(self, pressed_keys):
+
+        up = pressed_keys[self.moves["up"]]
+        down = pressed_keys[self.moves["down"]]
+        left = pressed_keys[self.moves["left"]]
+        right = pressed_keys[self.moves["right"]]
+     
+        if up == True:
+            if left == True:
+                self.velocity.update_direction(135)
+            elif right == True:
+                self.velocity.update_direction(45)
+            else:
+                self.velocity.update_direction(90)
+                
+        elif down == True:
+            if left == True:
+                self.velocity.update_direction(225)
+            elif right == True:
+                self.velocity.update_direction(315)
+            else:
+                self.velocity.update_direction(270)
+
+        elif left == True:
+            self.velocity.update_direction(180)
+
+        elif right == True:
+             self.velocity.update_direction(0)
+
     def calc_motion(self):
         
         angle_degrees = 0

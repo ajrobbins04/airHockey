@@ -2,12 +2,13 @@ import pygame
 pygame.init()
 
 from position.position import Position
+from velocity.velocity import Velocity
 from constants.constants import *
 
 # Define a Player object by extending pygame's Sprite
 # The surface drawn on the screen is now an attribute of 'player'
 class FieldObject(pygame.sprite.Sprite):
-    def __init__(self, color, pixels_x, pixels_y, radius):
+    def __init__(self, color, pixels_x, pixels_y, radius, speed):
 
         # inherits from Sprite 
         super(FieldObject, self).__init__()
@@ -25,8 +26,9 @@ class FieldObject(pygame.sprite.Sprite):
         # red or blue for paddles, and black for puck
         self.color = color
 
-        # the position is the circles center
+        # pos = the circle's center
         self.pos = Position(pixels_x, pixels_y)
+        self.velocity = Velocity(speed)
         
     def get_surface(self):
         return self.surface

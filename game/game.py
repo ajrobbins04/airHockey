@@ -31,53 +31,35 @@ class Game:
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width
         pixels_y = SCREEN_HEIGHT / 2
-        radius = 40
 
-        return Paddle(RED, pixels_x, pixels_y, radius)
+        return Paddle(RED, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_SPEED)
 
     def _create_paddle_blue(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 3
         pixels_y = SCREEN_HEIGHT / 2
-        radius = 40
-        return Paddle(BLUE, pixels_x, pixels_y, radius)
+        return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_SPEED)
 
     def _create_puck(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 2
         pixels_y = SCREEN_HEIGHT / 2
-        radius = 30
-        return Puck(BLACK, pixels_x, pixels_y, radius)
+        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_START_SPEED)
     
     def update(self, pressed_keys: pygame.key):
        
         frame_rate = self.clock.tick(60)
-        time_passed = frame_rate/1000
+        time_passed: float = frame_rate/1000.0
 
         self.puck.move(time_passed)
 
-        if pressed_keys[K_UP]:
-            self.paddleBlue.update_position(0, -2)  # blue moves up
-        if pressed_keys[K_DOWN]:
-            self.paddleBlue.update_position(0, 2)   # blue moves down
-        if pressed_keys[K_LEFT]:
-            self.paddleBlue.update_position(-2, 0)  # blue moves left
-        if pressed_keys[K_RIGHT]:
-            self.paddleBlue.update_position(2, 0)   # blue moves right
-        if pressed_keys[K_w]:
-            self.paddleRed.update_position(0, -2)   # red moves up
-        if pressed_keys[K_s]:
-            self.paddleRed.update_position(0, 2)    # red moves down
-        if pressed_keys[K_a]:
-            self.paddleRed.update_position(-2, 0)   # red moves left
-        if pressed_keys[K_d]:
-            self.paddleRed.update_position(2, 0)    # red moves right
-
         self.check_paddle_boundaries()
-        self.paddleBlue.move(pressed_keys)
-        self.paddleRed.move(pressed_keys)
+
+        self.paddleBlue.move(pressed_keys, time_passed)
+        self.paddleRed.move(pressed_keys, time_passed)
+      
 
         self.paddleRed.track_movement()
         self.paddleBlue.track_movement()

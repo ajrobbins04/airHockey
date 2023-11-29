@@ -2,12 +2,12 @@ from angle.angle import Angle
 from constants.constants import *
 
 class Velocity:
-    def __init__(self):
+    def __init__(self, speed):
 
         # velocity direction is set at a random angle
         self._direction = Angle()
 
-        self._speed = PUCK_START_SPEED
+        self._speed = speed
 
         self._dx = self._speed * self._direction.get_x_direction()
         self._dy = self._speed * self._direction.get_y_direction()

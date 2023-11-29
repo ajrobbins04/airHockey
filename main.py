@@ -29,20 +29,22 @@ def game_loop():
                     running = False
                 elif event.key == K_SPACE:
                     pause = True
-                """elif event.key in game.redKeys:
-                    game.paddleRed.begin_track_movement()
-                elif event.key in game.blueKeys:
-                    game.paddleBlue.begin_track_movement()"""
+     
+                elif event.key in game.paddleBlue.moves.values():
+                    game.paddleBlue.set_moving(True)
+                elif event.key in game.paddleRed.moves.values():
+                    game.paddleRed.set_moving(True)
+                
                     
             elif event.type == QUIT:
                 running = False
            
             # releasing a key stops movement
-            """elif event.type == KEYUP:
-                if event.key in game.redKeys:
-                    game.paddleRed.end_track_movement()
-                elif event.key in game.blueKeys:
-                    game.paddleBlue.end_track_movement()"""
+            elif event.type == KEYUP:
+                if event.key in game.paddleBlue.moves.values():
+                    game.paddleBlue.stop_moving()
+                elif event.key in game.paddleRed.moves.values():
+                    game.paddleRed.stop_moving()
 
         # returns a dictionary of the keys that were pressed
         pressed_keys = pygame.key.get_pressed()

@@ -2,18 +2,13 @@ import pygame
 pygame.init()
 
 from fieldObject.fieldObject import FieldObject
-from velocity.velocity import Velocity
 from paddle.paddle import Paddle
 
 class Puck(FieldObject):
-    def __init__(self, color, pixelsX, pixelsY, radius):
-        super().__init__(color, pixelsX, pixelsY, radius)
+    def __init__(self, color, pixelsX, pixelsY, radius, speed):
+        super().__init__(color, pixelsX, pixelsY, radius, speed)
         pygame.sprite.Sprite.__init__(self) 
 
-        self.velocity = Velocity()
-
-        # assign current position to rect.center
-        self.update_rect()
 
     def move(self, time_passed):
 
