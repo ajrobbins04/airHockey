@@ -32,21 +32,21 @@ class Game:
         pixels_x = quarter_width
         pixels_y = SCREEN_HEIGHT / 2
 
-        return Paddle(RED, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED) 
+        return Paddle(RED, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED, PADDLE_BOUNCE) 
 
     def _create_paddle_blue(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 3
         pixels_y = SCREEN_HEIGHT / 2
-        return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED) 
+        return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED, PADDLE_BOUNCE) 
 
     def _create_puck(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 2
         pixels_y = SCREEN_HEIGHT / 2
-        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED) 
+        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED, PUCK_BOUNCE) 
     
     def update(self, pressed_keys: pygame.key):
        
@@ -59,9 +59,11 @@ class Game:
 
         self.paddleBlue.move(pressed_keys, time_passed)
         self.paddleRed.move(pressed_keys, time_passed)
-      
 
-        self.check_collisions()
+        if pygame.sprite.collide_circle(self.paddleRed, self.puck):
+            self.puck.resolve_collision(self.paddleRed)
+        elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):  
+            self.puck.resolve_collision(self.paddleBlue)
       
     
     def check_collisions(self):
@@ -106,39 +108,31 @@ class Game:
         # Check if paddleRed has hit the bottom boundary. If so, assign it that position.
         if self.paddleRed.get_y() + self.paddleRed.get_radius() >= SCREEN_HEIGHT:
             self.paddleRed.pos.set_y(SCREEN_HEIGHT - self.paddleRed.get_radius())
-            self.paddleRed.end_track_movement() # the paddle has stopped
 
         # Check if paddleRed has hit the top boundary. If so, assign it that position.
         elif self.paddleRed.get_y() - self.paddleRed.get_radius() <= 0:
             self.paddleRed.pos.set_y(0 + self.paddleRed.get_radius())
-            self.paddleRed.end_track_movement()
 
         # Check if paddleRed has hit the far left boundary. If so, assign it that position.
         if self.paddleRed.get_x() - self.paddleRed.get_radius() <= 0:
             self.paddleRed.pos.set_x(0 + self.paddleRed.get_radius())
-            self.paddleRed.end_track_movement()
 
         # Check if paddleRed has hit the midpoint of the field. If so, assign it that position.
         elif self.paddleRed.get_x() + self.paddleRed.get_radius() >= SCREEN_WIDTH // 2:
             self.paddleRed.pos.set_x((SCREEN_WIDTH // 2) - self.paddleRed.get_radius())
-            self.paddleRed.end_track_movement()
 
         # Check if paddleBlue has hit the bottom boundary. If so, assign it that position.
         if self.paddleBlue.get_y() + self.paddleBlue.get_radius() >= SCREEN_HEIGHT:
             self.paddleBlue.pos.set_y(SCREEN_HEIGHT - self.paddleBlue.get_radius())
-            self.paddleBlue.end_track_movement()
 
         # Check if paddleBlue has hit the top boundary. If so, assign it that position.
         elif self.paddleBlue.get_y() - self.paddleBlue.get_radius() <= 0:
             self.paddleBlue.pos.set_y(0 + self.paddleBlue.get_radius())
-            self.paddleBlue.end_track_movement()
 
         # Check if paddleBlue has hit the far right boundary. If so, assign it that position.
         if self.paddleBlue.get_x() + self.paddleBlue.get_radius() >= SCREEN_WIDTH:
             self.paddleBlue.pos.set_x(SCREEN_WIDTH - self.paddleBlue.get_radius())
-            self.paddleBlue.end_track_movement()
 
         # Check if paddleBlue has hit the midpoint of the field. If so, assign it that position.
         elif self.paddleBlue.get_x() - self.paddleBlue.get_radius() <= SCREEN_WIDTH // 2:
             self.paddleBlue.pos.set_x((SCREEN_WIDTH // 2) + self.paddleBlue.get_radius())
-            self.paddleBlue.end_track_movement()

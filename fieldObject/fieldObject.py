@@ -8,13 +8,14 @@ from constants.constants import *
 # Define a Player object by extending pygame's Sprite
 # The surface drawn on the screen is now an attribute of 'player'
 class FieldObject(pygame.sprite.Sprite):
-    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed):
+    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed, restitution):
 
         # inherits from Sprite 
         super(FieldObject, self).__init__()
   
         self.radius = radius
         self.mass = mass
+        self.restitution = restitution # level of bounciness upon collision
 
         # surface size is twice the size of the radius
         surface = pygame.Surface((radius * 2, radius * 2))
@@ -35,6 +36,9 @@ class FieldObject(pygame.sprite.Sprite):
     def get_radius(self):
         return self.radius
     
+    def get_restitution(self):
+        return self.restitution
+    
     def get_mass(self):
         return self.mass
     
@@ -46,6 +50,12 @@ class FieldObject(pygame.sprite.Sprite):
     
     def get_position(self):
         return self.pos.get_position()
+    
+    def get_direction(self):
+        return self.velocity.get_direction()
+    
+    def get_speed(self):
+        return self.velocity.get_speed()
     
     def update_position(self, pixels_x, pixels_y):
         self.pos.update_pos(pixels_x, pixels_y)

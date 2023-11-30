@@ -17,8 +17,8 @@ from pygame.locals import (
 )
 
 class Paddle(FieldObject):
-    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed):
-        super().__init__(color, pixels_x, pixels_y, radius, mass, speed)
+    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed, restitution):
+        super().__init__(color, pixels_x, pixels_y, radius, mass, speed, restitution)
 
         # paddle is initially stationary
         self.moving = False
@@ -56,7 +56,7 @@ class Paddle(FieldObject):
             # reassigns rect.center to updated position
             self.update_rect()
 
-        
+  
     # checks if the event key is one of the
     # possible inputs to move the paddle
     def in_keys(self, key):

@@ -59,6 +59,12 @@ class Angle:
         self._x_direction = math.cos(self._angle_radians)
         self._y_direction = math.sin(self._angle_radians)
 
+    def set_direction_radians(self, angle_radians):
+        
+        self._angle_degrees = math.degrees(angle_radians)
+        self._angle_radians = angle_radians
+        self._x_direction = math.cos(self._angle_radians)
+        self._y_direction = math.sin(self._angle_radians)
 
     # returns the angle mirroring the current angle
     def get_angle_mirror(self, minuend):

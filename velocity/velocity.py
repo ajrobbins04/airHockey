@@ -14,8 +14,12 @@ class Velocity:
 
     def set_dx(self, dx):
         self._dx = dx
-        
+
     def set_dy(self, dy):
+        self._dy = dy
+
+    def set_velocity(self, dx, dy):
+        self._dx = dx
         self._dy = dy
 
     def get_dx(self):
@@ -25,13 +29,16 @@ class Velocity:
         return self._dy
     
     def get_direction(self):
-        return self._direction
+        return self._direction.get_angle_radians()
+    
+    def get_speed(self):
+        return self._speed
     
     def increase_velocity(self, speedIncrease):
         self._speed += speedIncrease
 
     def get_velocity(self):
-        return self._dx, self._dy
+        return (self._dx, self._dy)
     
     def get_direction_angle_opposite(self):
         return self._direction.get_angle_opposite()
@@ -51,6 +58,9 @@ class Velocity:
 
     def update_direction(self, angle_degrees):
         self._direction.set_direction(angle_degrees)
+
+    def update_direction_radians(self, angle_radians):
+        self._direction.set_direction_radians(angle_radians)
     
     # calculate new velocity
     def update_velocity(self):
