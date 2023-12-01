@@ -32,31 +32,29 @@ class Game:
         pixels_x = quarter_width
         pixels_y = SCREEN_HEIGHT / 2
 
-        return Paddle(RED, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED, PADDLE_BOUNCE) 
+        return Paddle(RED, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED, 0) # set initial angle to 0 degrees
 
     def _create_paddle_blue(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 3
         pixels_y = SCREEN_HEIGHT / 2
-        return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED, PADDLE_BOUNCE) 
+        return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED, 0) 
 
     def _create_puck(self):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 2
         pixels_y = SCREEN_HEIGHT / 2
-        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED, PUCK_BOUNCE) 
+        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED, None) # angle is None b/c it gets assigned randomly
     
     def update(self, pressed_keys: pygame.key):
        
         frame_rate = self.clock.tick(60)
         time_passed: float = frame_rate/1000.0
 
+        # all move methods will check for crossed boundaries internally
         self.puck.move(time_passed)
-
-        self.check_paddle_boundaries()
-
         self.paddleBlue.move(pressed_keys, time_passed)
         self.paddleRed.move(pressed_keys, time_passed)
 
@@ -70,13 +68,13 @@ class Game:
           
         if pygame.sprite.collide_circle(self.paddleRed, self.puck):
             if self.paddleRed.is_moving() == True:
-                self.puck.bounce_off_moving_paddle(self.paddleRed)
+                self.puck.resolve_collision(self.paddleRed)
             else:
                 self.puck.bounce_off_paddle()
         
         elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
             if self.paddleBlue.is_moving() == True:
-                self.puck.bounce_off_moving_paddle(self.paddleBlue)
+                self.puck.resolve_collision(self.paddleBlue)
             else:
                 self.puck.bounce_off_paddle()
 
@@ -102,37 +100,3 @@ class Game:
         self.paddleBlue.draw_field_obj(self.screen)
         self.puck.draw_field_obj(self.screen)
 
-
-    def check_paddle_boundaries(self):
-        
-        # Check if paddleRed has hit the bottom boundary. If so, assign it that position.
-        if self.paddleRed.get_y() + self.paddleRed.get_radius() >= SCREEN_HEIGHT:
-            self.paddleRed.pos.set_y(SCREEN_HEIGHT - self.paddleRed.get_radius())
-
-        # Check if paddleRed has hit the top boundary. If so, assign it that position.
-        elif self.paddleRed.get_y() - self.paddleRed.get_radius() <= 0:
-            self.paddleRed.pos.set_y(0 + self.paddleRed.get_radius())
-
-        # Check if paddleRed has hit the far left boundary. If so, assign it that position.
-        if self.paddleRed.get_x() - self.paddleRed.get_radius() <= 0:
-            self.paddleRed.pos.set_x(0 + self.paddleRed.get_radius())
-
-        # Check if paddleRed has hit the midpoint of the field. If so, assign it that position.
-        elif self.paddleRed.get_x() + self.paddleRed.get_radius() >= SCREEN_WIDTH // 2:
-            self.paddleRed.pos.set_x((SCREEN_WIDTH // 2) - self.paddleRed.get_radius())
-
-        # Check if paddleBlue has hit the bottom boundary. If so, assign it that position.
-        if self.paddleBlue.get_y() + self.paddleBlue.get_radius() >= SCREEN_HEIGHT:
-            self.paddleBlue.pos.set_y(SCREEN_HEIGHT - self.paddleBlue.get_radius())
-
-        # Check if paddleBlue has hit the top boundary. If so, assign it that position.
-        elif self.paddleBlue.get_y() - self.paddleBlue.get_radius() <= 0:
-            self.paddleBlue.pos.set_y(0 + self.paddleBlue.get_radius())
-
-        # Check if paddleBlue has hit the far right boundary. If so, assign it that position.
-        if self.paddleBlue.get_x() + self.paddleBlue.get_radius() >= SCREEN_WIDTH:
-            self.paddleBlue.pos.set_x(SCREEN_WIDTH - self.paddleBlue.get_radius())
-
-        # Check if paddleBlue has hit the midpoint of the field. If so, assign it that position.
-        elif self.paddleBlue.get_x() - self.paddleBlue.get_radius() <= SCREEN_WIDTH // 2:
-            self.paddleBlue.pos.set_x((SCREEN_WIDTH // 2) + self.paddleBlue.get_radius())

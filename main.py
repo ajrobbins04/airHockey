@@ -5,7 +5,6 @@ from game.game import Game
 
 # import keys to handle events
 from pygame.locals import (
-    K_SPACE,
     K_ESCAPE,
     KEYDOWN,
     KEYUP,
@@ -40,9 +39,9 @@ def game_loop():
             # releasing a key stops movement
             elif event.type == KEYUP:
                 if event.key in game.paddleBlue.moves.values():
-                    game.paddleBlue.stop_moving()
+                    game.paddleBlue.set_moving(False)
                 elif event.key in game.paddleRed.moves.values():
-                    game.paddleRed.stop_moving()
+                    game.paddleRed.set_moving(False)
 
         # returns a dictionary of the keys that were pressed
         pressed_keys = pygame.key.get_pressed()

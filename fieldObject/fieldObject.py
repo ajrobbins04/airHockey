@@ -8,66 +8,80 @@ from constants.constants import *
 # Define a Player object by extending pygame's Sprite
 # The surface drawn on the screen is now an attribute of 'player'
 class FieldObject(pygame.sprite.Sprite):
-    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed, restitution):
+    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed, angle):
 
         # inherits from Sprite 
         super(FieldObject, self).__init__()
-  
+
         self.radius = radius
         self.mass = mass
-        self.restitution = restitution # level of bounciness upon collision
+
+        # both attributes are vectors
+        self.position = Position(pixels_x, pixels_y)
+        self.velocity = Velocity(speed, angle)
 
         # surface size is twice the size of the radius
         surface = pygame.Surface((radius * 2, radius * 2))
-
+  
         # include rect to use its collision detection methods
         self.rect = surface.get_rect(center=(pixels_x, pixels_y))
 
         # will be red or blue for paddles and black for puck
         self.color = color
 
-        # pos is the circle's center
-        self.pos = Position(pixels_x, pixels_y)
-        self.velocity = Velocity(speed)
-        
-    def get_color(self):
-        return self.color
     
     def get_radius(self):
         return self.radius
     
-    def get_restitution(self):
-        return self.restitution
-    
     def get_mass(self):
         return self.mass
     
+    """ all the wrapper methods for position and velocity attributes """
     def get_x(self):
-        return self.pos.get_x()
+        return self.position.get_x()
     
     def get_y(self):
-        return self.pos.get_y()
+        return self.position.get_y()
     
     def get_position(self):
-        return self.pos.get_position()
+        return self.position.get_position()
     
+    def get_x_velocity(self):
+        return self.velocity.get_x_velocity()
+    
+    def get_y_velocity(self):
+        return self.velocity.get_y_velocity()
+    
+    def get_velocity(self):
+        return self.velocity.get_velocity()
+
+    # returns direction in radians
     def get_direction(self):
         return self.velocity.get_direction()
     
-    def get_speed(self):
-        return self.velocity.get_speed()
-    
-    def update_position(self, pixels_x, pixels_y):
-        self.pos.update_pos(pixels_x, pixels_y)
+    def add_x_y(self, pixels_x, pixels_y):
+        self.position.add_x_y(pixels_x, pixels_y)
         self.update_rect()
+
+    # returns mirrored angle in radians
+    def calc_mirror_angle(self, minuend):
+        return self.velocity.calc_mirror_angle(minuend)
     
-    # rect.center must contain current position of
-    # sprite for collision detection
+    def set_velocity(self, dx, dy):
+        self.velocity.set_velocity(dx, dy)
+
+    # updates velocity based on new direction given in radians
+    def update_velocity(self, angle_radians):
+        self.velocity.update_velocity(angle_radians)
+    
+    # rect.center must contain current position for collision detection
     def update_rect(self):
         self.rect.center = self.get_position()
 
     def draw_field_obj(self, screen: pygame.Surface):
         pygame.draw.circle(screen, self.color, self.get_position(), self.radius) 
+
+    """ boundary-checking methods """
 
     def hit_top(self):
         return self.get_y() - self.radius <= 0
@@ -80,6 +94,14 @@ class FieldObject(pygame.sprite.Sprite):
 
     def hit_right(self):
         return self.get_x() + self.radius >= SCREEN_WIDTH
+    
+    def hit_midfield(self):
+        # check from left side of field
+        if self.position.get_x() <= SCREEN_WIDTH // 2:
+            return self.get_x() + self.get_radius() >= SCREEN_WIDTH // 2
+        # check from right side of field
+        else:
+            return self.get_x() + self.get_radius() <= SCREEN_WIDTH // 2
     
     def hit_top_bottom(self):
         if self.hit_top() or self.hit_bottom():

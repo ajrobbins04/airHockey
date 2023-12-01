@@ -3,7 +3,6 @@ pygame.init()
 
 from fieldObject.fieldObject import FieldObject
 from position.position import Position
-from angle.angle import Angle
 from constants.constants import *
 from pygame.locals import (
     K_UP,
@@ -17,26 +16,31 @@ from pygame.locals import (
 )
 
 class Paddle(FieldObject):
-    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed, restitution):
-        super().__init__(color, pixels_x, pixels_y, radius, mass, speed, restitution)
+    def __init__(self, color, pixels_x, pixels_y, radius, mass, speed, angle):
+        super().__init__(color, pixels_x, pixels_y, radius, mass, speed, angle)
 
         # paddle is initially stationary
         self.moving = False
-        self.velocity.set_dx(0)
-        self.velocity.set_dy(0)
 
+        # set initial velocity to 0
+        self.velocity.set_velocity_stationary()
+
+        # assign input keys to corresponding moves
         self.setup_moves()
 
 
     def setup_moves(self):
         directions = ["up", "down", "left", "right"]
-        if self.color == BLUE:
-            input_keys = [K_UP, K_DOWN, K_LEFT, K_RIGHT]
-        else:
+
+        # lhs paddle corresponds to keys on far left of keyboard
+        if self.position.get_x() <= SCREEN_WIDTH // 2:
             input_keys = [K_w, K_s, K_a, K_d]
-        
-        # assigns each direction to the key that 
-        # triggers it when pressed
+        # rhs paddle corresponds to keys on far right of keyboard
+        else:
+            input_keys = [K_UP, K_DOWN, K_LEFT, K_RIGHT]
+
+        # assigns each movemment direction to the 
+        # key that triggers it when pressed
         self.moves = dict(zip(directions, input_keys))
 
     # move according to the pressed keys that
@@ -44,17 +48,17 @@ class Paddle(FieldObject):
     def move(self, pressed_keys, time_passed):
         
         if self.moving == True:
-            self.calc_direction(pressed_keys)
-            self.velocity.update_velocity()
+            self.update_direction(pressed_keys)
+
             # new position = position + (velocity * time)
-            self.pos.add_x(self.velocity.get_dx() * time_passed)
-            self.pos.add_y(self.velocity.get_dy() * time_passed)
+            x = self.get_x_velocity() * time_passed
+            y = self.get_y_velocity() * time_passed
 
-            # check if new position out of bounds
-            
+            self.add_x_y(x, y)
 
-            # reassigns rect.center to updated position
-            self.update_rect()
+            if self.crossed_boundaries() == True:
+                # reassigns rect.center to corrected position
+                self.update_rect()
 
   
     # checks if the event key is one of the
@@ -65,14 +69,6 @@ class Paddle(FieldObject):
                 return True
         return False
  
-    def begin_track_movement(self):
-        self.moving = True
-
-
-    def end_track_movement(self):
-        self.moving = False
-      
-
     def set_moving(self, moving):
         self.moving = moving
 
@@ -84,50 +80,61 @@ class Paddle(FieldObject):
         self.angle = 0
 
     # determines the angle in which the paddle is moving
-    def calc_direction(self, pressed_keys):
+    def update_direction(self, pressed_keys):
 
         up = pressed_keys[self.moves["up"]]
         down = pressed_keys[self.moves["down"]]
         left = pressed_keys[self.moves["left"]]
         right = pressed_keys[self.moves["right"]]
      
+        # updates velocity based on new direction given
         if up == True:
             if left == True:
-                self.velocity.update_direction(225)
+                self.update_velocity(225)
             elif right == True:
-                self.velocity.update_direction(315)
+                self.update_velocity(315)
             else:
-                self.velocity.update_direction(270)
+                self.update_velocity(270)
                 
         elif down == True:
             if left == True:
-                self.velocity.update_direction(135)
+                self.update_velocity(135)
             elif right == True:
-                self.velocity.update_direction(45)
+                self.update_velocity(45)
             else:
-                self.velocity.update_direction(90)
+                self.update_velocity(90)
 
         elif left == True:
-            self.velocity.update_direction(180)
+            self.update_velocity(180)
 
         elif right == True:
-             self.velocity.update_direction(0)
+             self.update_velocity(0)
 
-    def calc_motion(self):
+    def crossed_boundaries(self):
+
+        if self.hit_top() == True:
+            self.position.set_y(0 + self.get_radius())
+            return True
+        elif self.hit_bottom() == True:
+            self.position.set_y(SCREEN_HEIGHT - self.get_radius())
+            return True
         
-        angle_degrees = 0
-
-        if self.prev_positions:
-            pos_start: Position = self.prev_positions[0]
-            pos_end: Position = self.prev_positions[-1]
-
-            x1 = pos_start.get_x()
-            y1 = pos_start.get_y()
-            x2 = pos_end.get_x()
-            y2 = pos_end.get_y()
-
-            # Calculate the angle of the path
-            angle_degrees = Angle.calc_angle(x1, y1, x2, y2)
-
-        # returns direction 
-        return angle_degrees
+        # check paddle on lhs of field
+        if self.get_x() <= SCREEN_WIDTH // 2:
+            if self.hit_left():
+                self.position.set_x(0 + self.get_radius())
+                return True
+            elif self.hit_midfield():
+                self.position.set_x((SCREEN_WIDTH // 2) - self.get_radius())
+                return True
+            
+        # check paddle on rhs of field
+        else:
+            if self.hit_right():
+                self.position.set_x(SCREEN_WIDTH - self.get_radius)
+                return True
+            elif self.hit_midfield():
+                self.position.set_x((SCREEN_WIDTH // 2) + self.get_radius())
+                return True
+            
+        return False
