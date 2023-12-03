@@ -19,12 +19,14 @@ from pygame.locals import (
 )
 
 class Game:
-    def __init__(self):
+    def __init__(self, level):
+        
+        self.level = level
+        self.puck = self._create_puck(level)
         self.paddleRed = self._create_paddle_red()
         self.paddleBlue = self._create_paddle_blue()
-        self.puck = self._create_puck()
-        self.screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
         self.clock = pygame.time.Clock()
+        self.screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
  
     def _create_paddle_red(self):
@@ -42,13 +44,21 @@ class Game:
         pixels_y = SCREEN_HEIGHT / 2
         return Paddle(BLUE, pixels_x, pixels_y, PADDLE_RADIUS, PADDLE_MASS, PADDLE_SPEED, 0) 
 
-    def _create_puck(self):
+    def _create_puck(self, level):
 
         quarter_width = SCREEN_WIDTH / 4
         pixels_x = quarter_width * 2
         pixels_y = SCREEN_HEIGHT / 2
-        return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED, None) # angle is None b/c it gets assigned randomly
-    
+
+        if level == "easy":
+            # angle is None b/c it gets assigned randomly
+            return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED, None, PUCK_MAX_SPEED_EASY) 
+        elif level == "medium":
+            return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED, None, PUCK_MAX_SPEED_MEDIUM) 
+        elif level == "hard":
+            return Puck(BLACK, pixels_x, pixels_y, PUCK_RADIUS, PUCK_MASS, PUCK_START_SPEED, None, PUCK_MAX_SPEED_HARD) 
+
+
     def update(self, pressed_keys: pygame.key):
        
         frame_rate = self.clock.tick(45)
@@ -102,4 +112,3 @@ class Game:
         self.paddleRed.draw_field_obj(self.screen)
         self.paddleBlue.draw_field_obj(self.screen)
         self.puck.draw_field_obj(self.screen)
-

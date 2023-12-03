@@ -2,22 +2,34 @@
 import pygame
 pygame.init()
 from game.game import Game
+from menu.menu import Menu
+from constants.constants import *
 
 # import keys to handle events
 from pygame.locals import (
+    K_UP,
+    K_DOWN,
     K_ESCAPE,
     KEYDOWN,
     KEYUP,
     QUIT,     # triggered when user closes window
 )
 
-
 def game_loop():
+    
+    # game is not running yet
+    running = False
 
-    game = Game()
-    running = True
+    menu = Menu()
+    menu.run_menu_loop()
+
+    if menu.get_state() != "exit":
+        game = Game(menu.get_state())
+        running = True
 
     while running:
+
+        pygame.display.set_caption('Air Hockey')
 
         # access list of active events in the queue
         for event in pygame.event.get():

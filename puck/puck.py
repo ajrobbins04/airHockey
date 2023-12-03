@@ -8,10 +8,11 @@ from paddle.paddle import Paddle
 from constants.constants import *
 
 class Puck(FieldObject):
-    def __init__(self, color, pixelsX, pixelsY, radius, mass, speed, angle):
+    def __init__(self, color, pixelsX, pixelsY, radius, mass, speed, angle, max_speed):
         super().__init__(color, pixelsX, pixelsY, radius, mass, speed, angle)
         pygame.sprite.Sprite.__init__(self) 
 
+        self.max_speed = max_speed
 
     def move(self, time_passed):
 
@@ -26,7 +27,7 @@ class Puck(FieldObject):
             self.update_rect()
       
         # velocity gradually decreases due to friction
-        self.velocity.add_friction(PUCK_MIN_SPEED, PUCK_MAX_SPEED)
+        self.velocity.add_friction(PUCK_MIN_SPEED, self.max_speed)
 
     def crossed_boundaries(self):
         # bounce if new position out of bounds
