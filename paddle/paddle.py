@@ -69,15 +69,18 @@ class Paddle(FieldObject):
                 return True
         return False
  
-    def set_moving(self, moving):
-        self.moving = moving
+    def start_moving(self):
+        self.moving = True
+        self.set_speed(PADDLE_SPEED)
 
     def is_moving(self):
         return self.moving
     
+    # collisions w/a non-moving puck will
+    # have less momentum w/o speed
     def stop_moving(self):
         self.moving = False
-        self.velocity.set_velocity_direction(0)
+        self.set_speed(0)
 
     # determines the angle in which the paddle is moving
     def update_direction(self, pressed_keys):
@@ -120,7 +123,7 @@ class Paddle(FieldObject):
             return True
         
         # check paddle on lhs of field
-        if self.get_x() <= SCREEN_WIDTH // 2:
+        if self.color == RED:
             if self.hit_left():
                 self.position.set_x(0 + self.get_radius())
                 return True

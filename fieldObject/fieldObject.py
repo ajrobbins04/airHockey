@@ -36,6 +36,9 @@ class FieldObject(pygame.sprite.Sprite):
     def get_mass(self):
         return self.mass
     
+    def get_color(self):
+        return self.color
+    
     """ all the wrapper methods for position and velocity attributes """
     def get_x(self):
         return self.position.get_x()
@@ -111,7 +114,7 @@ class FieldObject(pygame.sprite.Sprite):
     
     def hit_midfield(self):
         # check from left side of field
-        if self.position.get_x() <= SCREEN_WIDTH // 2:
+        if self.get_color() == RED:
             return self.get_x() + self.get_radius() >= SCREEN_WIDTH // 2
         # check from right side of field
         else:

@@ -28,20 +28,19 @@ def game_loop():
                     running = False
           
                 elif event.key in game.paddleBlue.moves.values():
-                    game.paddleBlue.set_moving(True)
+                    game.paddleBlue.start_moving()
                 elif event.key in game.paddleRed.moves.values():
-                    game.paddleRed.set_moving(True)
+                    game.paddleRed.start_moving()
                 
-                    
             elif event.type == QUIT:
                 running = False
            
             # releasing a key stops movement
             elif event.type == KEYUP:
                 if event.key in game.paddleBlue.moves.values():
-                    game.paddleBlue.set_moving(False)
+                    game.paddleBlue.stop_moving()
                 elif event.key in game.paddleRed.moves.values():
-                    game.paddleRed.set_moving(False)
+                    game.paddleRed.stop_moving()
 
         # returns a dictionary of the keys that were pressed
         pressed_keys = pygame.key.get_pressed()

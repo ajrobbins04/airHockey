@@ -4,6 +4,7 @@ pygame.init()
 from paddle.paddle import Paddle
 from puck.puck import Puck
 from constants.constants import *
+import math
 
 # import pressed_keys to handle events
 from pygame.locals import (
@@ -58,25 +59,27 @@ class Game:
         self.paddleBlue.move(pressed_keys, time_passed)
         self.paddleRed.move(pressed_keys, time_passed)
 
-        if pygame.sprite.collide_circle(self.paddleRed, self.puck):
-            self.puck.resolve_collision(self.paddleRed)
-        elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):  
-            self.puck.resolve_collision(self.paddleBlue)
-      
+        self.check_collisions()
     
     def check_collisions(self):
-          
+
         if pygame.sprite.collide_circle(self.paddleRed, self.puck):
-            if self.paddleRed.is_moving() == True:
-                self.puck.resolve_collision(self.paddleRed)
-            else:
-                self.puck.bounce_off_paddle()
-        
-        elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):      
-            if self.paddleBlue.is_moving() == True:
-                self.puck.resolve_collision(self.paddleBlue)
-            else:
-                self.puck.bounce_off_paddle()
+            self.puck.resolve_collision(self.paddleRed)
+
+            # crossed_boundaries corrects position internally.
+            # only rect.center needs to be updated afterwards.
+            if self.puck.crossed_boundaries() == True:
+                self.puck.update_rect()
+            if self.paddleRed.crossed_boundaries() == True:
+                self.paddleRed.update_rect() 
+
+        elif pygame.sprite.collide_circle(self.paddleBlue, self.puck):  
+            self.puck.resolve_collision(self.paddleBlue)
+            if self.puck.crossed_boundaries() == True:
+                self.puck.update_rect()
+            if self.paddleBlue.crossed_boundaries() == True:
+                self.paddleBlue.update_rect() 
+           
 
     def draw_field(self):
         

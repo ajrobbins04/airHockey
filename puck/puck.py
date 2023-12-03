@@ -18,6 +18,7 @@ class Puck(FieldObject):
         # new position = position + (velocity * time)
         x = (self.get_x_velocity() * time_passed)
         y = (self.get_y_velocity() * time_passed)
+     
         self.add_x_y(x, y)
 
         if self.crossed_boundaries() == True:
@@ -31,18 +32,16 @@ class Puck(FieldObject):
         # bounce if new position out of bounds
         if self.hit_top_bottom() == True:
             self.bounce_off_boundary(360)
-            #self.set_velocity(self.get_x_velocity(), self.get_y_velocity() *-1)
             return True
         elif self.hit_left_right() == True:
             self.bounce_off_boundary(180)
-            #self.set_velocity(self.get_x_velocity() *-1, self.get_y_velocity())
             return True
         
         return False
     
     def add_vectors(self, v1, v2):
-        x = math.sin(v1.x) * v1.y + math.sin(v2.x) * v2.y
-        y = math.cos(v1.x) * v1.y + math.cos(v2.x) * v2.y
+        x = math.cos(v1.x) * v1.y + math.cos(v2.x) * v2.y
+        y = math.sin(v1.x) * v1.y + math.sin(v2.x) * v2.y
 
         # applies pythagorean theorem to get final magnitude
         magnitude = math.hypot(x, y)
@@ -51,8 +50,6 @@ class Puck(FieldObject):
 
    
     def resolve_collision(self, paddle: Paddle):
-
-        self.separate(paddle)
 
         # must find normal of collision to determine the direction of puck's movement
        
@@ -66,17 +63,20 @@ class Puck(FieldObject):
 
         # angle perpendicular to collision angle is the direction
         # in which the objects move post-collision
-        post_collision_angle = collision_angle + math.pi/2
+        projection_angle = collision_angle + math.pi/2
         total_mass = self.mass + paddle.get_mass()
 
         # conservation of momentum stipulates that the puck's velocity is determined
         # by its initial velocity and its difference in weight from the paddle (it 
         # gains momentum b/c paddle is heavier) divided by the sum of weights
-        puck_final_speed = (self.get_speed() * (self.mass - paddle.get_mass()) + 2 * paddle.get_mass() * paddle.get_speed()) / total_mass
+        pre_collision_puck = pygame.Vector2(self.get_direction(), self.get_speed() * (self.mass - paddle.get_mass()) / total_mass)
+        post_collision_puck = pygame.Vector2(projection_angle, 2 * paddle.get_speed() * paddle.get_mass() / total_mass)
 
-        # Update puck velocity based on post-collision angle and speed
-        self.update_velocity(post_collision_angle)
-        self.set_speed(puck_final_speed)
+        puck_direction_speed = pygame.Vector2(self.add_vectors(pre_collision_puck, post_collision_puck))
+        self.set_speed(puck_direction_speed.y)
+        self.update_velocity(puck_direction_speed.x)
+        
+        self.separate(paddle)
 
         # ensure puck and paddle arent out of bounds
         if self.crossed_boundaries() == True:
@@ -91,7 +91,6 @@ class Puck(FieldObject):
 
         # amount of displacement determined by amount of overlap
         overlap = 0.5 * (distance - self.radius - paddle.get_radius())
-
         puck_x = (- (overlap * (self.get_x() - paddle.get_x()) / distance))
         puck_y = (- (overlap * (self.get_y() - paddle.get_y()) / distance))
         self.add_x_y(puck_x, puck_y)
@@ -100,76 +99,20 @@ class Puck(FieldObject):
         paddle_y = overlap * (self.get_y() - paddle.get_y()) / distance
         paddle.add_x_y(paddle_x, paddle_y)
 
-        # ensure puck and paddle aren't out of bounds
-        if self.crossed_boundaries() == True:
-            self.update_rect()
-        if paddle.crossed_boundaries() == True:
-            self.update_rect()
 
     # occurs when puck collides with a boundary
     def bounce_off_boundary(self, minuend): 
         # current direction is subtracted from the minuend
         # to find new direction in radians
         angle = self.calc_mirror_angle(minuend) # angle returned in radians
-        self.velocity.update_velocity(angle)
+
+        angle_degrees = math.degrees(angle)
+
+        # keep angle w/in 0 - 360 degree range
+        if angle_degrees < 0 or angle_degrees > 360:
+            angle_degrees = angle_degrees % 360
+            self.velocity.update_velocity_degrees(angle_degrees)
+        else:
+            self.velocity.update_velocity(angle)
 
 
-    # occurs when puck collides with a stationary paddle
-    """  def bounce_off_paddle(self, paddle: Paddle):
-       
-        self.separate()
-        
-        distance = pygame.Vector2(self.rect.center).distance_to(pygame.Vector2(paddle.rect.center))
-
-        # normal
-        normal_x = (self.get_x() - paddle.get_x()) / distance
-        normal_y = (self.get_y() - paddle.get_y()) / distance
-
-        # tangent
-        tangent_x = -normal_y
-        tangent_y = normal_x
-
-        # dot product tangent
-        dot_product_tan_1 = self.get_x_velocity() * tangent_x + self.get_y_velocity() * tangent_y
-        dot_product_tan_2 = paddle.get_x_velocity() * tangent_x + paddle.get_y_velocity() * tangent_y
-
-        puck_dx = tangent_x * dot_product_tan_1
-        puck_dy = tangent_y * dot_product_tan_1
-        self.set_velocity(puck_dx, puck_dy)
-
-        paddle_dx = tangent_x * dot_product_tan_2
-        paddle_dy = tangent_y * dot_product_tan_2
-        paddle.set_velocity(puck_dx, puck_dy)
-        """
-        # occurs when puck collides with a stationary paddle
-    def bounce_off_paddle(self, paddle: Paddle):
-       
-        self.separate()
-        distance = pygame.Vector2(self.rect.center).distance_to(pygame.Vector2(paddle.rect.center))
-
-        # normal
-        normal_x = (self.get_x() - paddle.get_x()) / distance
-        normal_y = (self.get_y() - paddle.get_y()) / distance
-
-        # tangent
-        tangent_x = -normal_y
-        tangent_y = normal_x
-
-        # dot product tangent
-        dot_product_tan_1 = self.get_x_velocity() * tangent_x + self.get_y_velocity() * tangent_y
-        dot_product_tan_2 = paddle.get_x_velocity() * tangent_x + paddle.get_y_velocity() * tangent_y
-
-        puck_dx = tangent_x * dot_product_tan_1
-        puck_dy = tangent_y * dot_product_tan_1
-        self.set_velocity(puck_dx, puck_dy)
-
-        paddle_dx = tangent_x * dot_product_tan_2
-        paddle_dy = tangent_y * dot_product_tan_2
-        paddle.set_velocity(paddle_dx, paddle_dy)
-
-        # ensure puck and paddle aren't out of bounds
-        if self.crossed_boundaries() == True:
-            self.update_rect()
-        if paddle.crossed_boundaries() == True:
-            self.update_rect()
-        

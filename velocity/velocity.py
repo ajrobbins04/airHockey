@@ -17,7 +17,8 @@ class Velocity:
         else:
             angle = angle
 
-        angle_radians = math.radians(angle)
+        # add 180 so puck moves down at 90 and up at 270 like paddles
+        angle_radians = math.radians((angle + 180) % 360)
         self.speed = speed
 
         velocity = self.calc_velocity(angle_radians)
@@ -46,7 +47,7 @@ class Velocity:
         angle_radians = self.get_direction()
         angle_degrees = math.degrees(angle_radians)
         mirror_degrees = minuend - angle_degrees
-        print(mirror_degrees)
+    
         return math.radians(mirror_degrees)
     
     def get_x_velocity(self):
