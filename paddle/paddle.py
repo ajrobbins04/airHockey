@@ -77,7 +77,7 @@ class Paddle(FieldObject):
     
     def stop_moving(self):
         self.moving = False
-        self.angle = 0
+        self.velocity.set_velocity_direction(0)
 
     # determines the angle in which the paddle is moving
     def update_direction(self, pressed_keys):

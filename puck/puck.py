@@ -31,9 +31,11 @@ class Puck(FieldObject):
         # bounce if new position out of bounds
         if self.hit_top_bottom() == True:
             self.bounce_off_boundary(360)
+            #self.set_velocity(self.get_x_velocity(), self.get_y_velocity() *-1)
             return True
         elif self.hit_left_right() == True:
             self.bounce_off_boundary(180)
+            #self.set_velocity(self.get_x_velocity() *-1, self.get_y_velocity())
             return True
         
         return False
@@ -70,26 +72,11 @@ class Puck(FieldObject):
         # conservation of momentum stipulates that the puck's velocity is determined
         # by its initial velocity and its difference in weight from the paddle (it 
         # gains momentum b/c paddle is heavier) divided by the sum of weights
-        pre_collision_puck = pygame.Vector2(self.get_direction(), self.get_speed() * (paddle.get_mass() - self.mass) / total_mass)
-        post_collision_puck = pygame.Vector2(post_collision_angle, 2 * paddle.get_speed() * paddle.get_mass() / total_mass)
+        puck_final_speed = (self.get_speed() * (self.mass - paddle.get_mass()) + 2 * paddle.get_mass() * paddle.get_speed()) / total_mass
 
-        puck_direction_speed = pygame.Vector2(pre_collision_puck, post_collision_puck)
-        self.speed = puck_direction_speed.y
-        self.update_velocity(puck_direction_speed.x)
-
-        # use collision angle, initial velocity, and initial direction to derive each sprite's new velocity
-        """puck_dx = self.get_x_velocity() * math.cos(self.get_direction() - collision_angle)
-        puck_dy = self.get_y_velocity() * math.sin(self.get_direction() - collision_angle)
-
-        paddle_dx = paddle.get_x_velocity() * math.cos(paddle.get_direction() - collision_angle)
-        paddle_dy = paddle.get_y_velocity() * math.sin(paddle.get_direction() - collision_angle)
-
-        # final velocity = initial velocity * (mass - paddle's mass) + (2 * paddle's mass * paddle's initial velocity * total mass
-        puck_dx_final = puck_dx * (self.mass - paddle.get_mass()) + (2 * paddle.get_mass() * paddle_dx) * total_mass
-        paddle_dx_final = paddle_dx * (self.mass - paddle.get_mass()) + (2 * paddle.get_mass() * puck_dx) * total_mass
-
-        self.update_velocity(math.atan2(puck_dy, puck_dx_final) + collision_angle)
-        paddle.update_velocity(math.atan2(paddle_dy, paddle_dx_final) + collision_angle)"""
+        # Update puck velocity based on post-collision angle and speed
+        self.update_velocity(post_collision_angle)
+        self.set_speed(puck_final_speed)
 
         # ensure puck and paddle arent out of bounds
         if self.crossed_boundaries() == True:
@@ -123,7 +110,7 @@ class Puck(FieldObject):
     def bounce_off_boundary(self, minuend): 
         # current direction is subtracted from the minuend
         # to find new direction in radians
-        angle = self.calc_mirror_angle(minuend)
+        angle = self.calc_mirror_angle(minuend) # angle returned in radians
         self.velocity.update_velocity(angle)
 
 

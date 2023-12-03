@@ -46,7 +46,7 @@ class Velocity:
         angle_radians = self.get_direction()
         angle_degrees = math.degrees(angle_radians)
         mirror_degrees = minuend - angle_degrees
-
+        print(mirror_degrees)
         return math.radians(mirror_degrees)
     
     def get_x_velocity(self):
@@ -62,19 +62,22 @@ class Velocity:
         return self.velocity
     
     def get_speed(self):
-        return self.velocity.x
+        return self.speed
     
     # returns the angle in radians
     def get_direction(self):
         return self.velocity.y
     
+    def set_speed(self, speed):
+        self.speed = speed
+    
     def set_velocity(self, dx, dy):
         velocity = math.sqrt((dx * dx) + (dy * dy))
         self.velocity.x = velocity
 
-    def set_velocity_direction(self, speed, direction):
-        self.velocity.x = speed
+    def set_velocity_direction(self, direction):
         self.velocity.y = direction
+        self.velocity.x = self.calc_velocity(direction)
     
     def set_velocity_stationary(self):
         self.velocity.x = 0
