@@ -15,6 +15,7 @@ class FieldObject(pygame.sprite.Sprite):
 
         self.radius = radius
         self.mass = mass
+        self.speed = speed
 
         # both attributes are vectors
         self.position = Position(pixels_x, pixels_y)
@@ -36,6 +37,9 @@ class FieldObject(pygame.sprite.Sprite):
     def get_mass(self):
         return self.mass
     
+    def get_speed(self):
+        return self.speed
+    
     """ all the wrapper methods for position and velocity attributes """
     def get_x(self):
         return self.position.get_x()
@@ -54,6 +58,8 @@ class FieldObject(pygame.sprite.Sprite):
     
     def get_velocity(self):
         return self.velocity.get_velocity()
+    def get_speed(self):
+        return self.velocity.get_speed()
 
     # returns direction in radians
     def get_direction(self):
@@ -70,10 +76,16 @@ class FieldObject(pygame.sprite.Sprite):
     def set_velocity(self, dx, dy):
         self.velocity.set_velocity(dx, dy)
 
+    def set_velocity_direction(self, speed, direction):
+        self.velocity.set_velocity_direction(speed, direction)
+
     # updates velocity based on new direction given in radians
     def update_velocity(self, angle_radians):
         self.velocity.update_velocity(angle_radians)
     
+    def update_velocity_degrees(self, angle_degrees):
+        self.velocity.update_velocity_degrees(angle_degrees)
+
     # rect.center must contain current position for collision detection
     def update_rect(self):
         self.rect.center = self.get_position()

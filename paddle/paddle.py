@@ -90,25 +90,25 @@ class Paddle(FieldObject):
         # updates velocity based on new direction given
         if up == True:
             if left == True:
-                self.update_velocity(225)
+                self.update_velocity_degrees(225)
             elif right == True:
-                self.update_velocity(315)
+                self.update_velocity_degrees(315)
             else:
-                self.update_velocity(270)
+                self.update_velocity_degrees(270)
                 
         elif down == True:
             if left == True:
-                self.update_velocity(135)
+                self.update_velocity_degrees(135)
             elif right == True:
-                self.update_velocity(45)
+                self.update_velocity_degrees(45)
             else:
-                self.update_velocity(90)
+                self.update_velocity_degrees(90)
 
         elif left == True:
-            self.update_velocity(180)
+            self.update_velocity_degrees(180)
 
         elif right == True:
-             self.update_velocity(0)
+             self.update_velocity_degrees(0)
 
     def crossed_boundaries(self):
 
@@ -131,7 +131,7 @@ class Paddle(FieldObject):
         # check paddle on rhs of field
         else:
             if self.hit_right():
-                self.position.set_x(SCREEN_WIDTH - self.get_radius)
+                self.position.set_x(SCREEN_WIDTH - self.get_radius())
                 return True
             elif self.hit_midfield():
                 self.position.set_x((SCREEN_WIDTH // 2) + self.get_radius())

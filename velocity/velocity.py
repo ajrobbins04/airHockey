@@ -61,6 +61,9 @@ class Velocity:
     def get_velocity(self):
         return self.velocity
     
+    def get_speed(self):
+        return self.velocity.x
+    
     # returns the angle in radians
     def get_direction(self):
         return self.velocity.y
@@ -68,6 +71,10 @@ class Velocity:
     def set_velocity(self, dx, dy):
         velocity = math.sqrt((dx * dx) + (dy * dy))
         self.velocity.x = velocity
+
+    def set_velocity_direction(self, speed, direction):
+        self.velocity.x = speed
+        self.velocity.y = direction
     
     def set_velocity_stationary(self):
         self.velocity.x = 0
@@ -80,16 +87,25 @@ class Velocity:
         self.velocity.x = velocity 
         self.velocity.y = angle_radians
 
+    def update_velocity_degrees(self, angle_degrees):
+        angle_radians = math.radians(angle_degrees)
+        velocity = self.calc_velocity(angle_radians)
+ 
+        self.velocity.x = velocity 
+        self.velocity.y = angle_radians
+
     def increase_speed(self, speedIncrease):
         self.speed += speedIncrease
 
     # used for the puck, which continues to slow 
     # down until a collision adds momentum
-    def add_friction(self, max_speed):
+    def add_friction(self, min_speed, max_speed):
         self.speed *= FRICTION
 
         # but never let puck be stationary
-        if self.speed < max_speed:
+        if self.speed <= min_speed:
+            self.speed = min_speed
+        elif self.speed >= max_speed:
             self.speed = max_speed
 
 
