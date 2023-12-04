@@ -61,7 +61,7 @@ class Game:
 
     def update(self, pressed_keys: pygame.key):
        
-        frame_rate = self.clock.tick(45)
+        frame_rate = self.clock.tick(40)
         time_passed: float = frame_rate/1000.0
 
         # all move methods will check for crossed boundaries internally

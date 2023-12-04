@@ -7,10 +7,8 @@ from constants.constants import *
 from pygame.locals import (
     K_UP,
     K_DOWN,
-    K_ESCAPE,
     KEYDOWN,
     K_RETURN,
-    K_KP_ENTER,
     QUIT,     # triggered when user closes window
 )
 
@@ -19,8 +17,10 @@ class Menu:
         self.state = "easy"
         self.screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
-        # every component shown on the menu screen
+        # the location of every component shown on the menu screen
         self.heading = pygame.Vector2((SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
+
+        # everything gets placed relative to the "select a level" heading
         self.cursor = pygame.Vector2(self.heading.x - 200, self.heading.y + 100)
         self.level_easy = pygame.Vector2(self.heading.x, self.heading.y + 100)
         self.level_medium = pygame.Vector2(self.heading.x, self.heading.y + 200)
@@ -35,6 +35,8 @@ class Menu:
 
         # use default font w/a font size of 45
         font = pygame.font.Font('fonts/8bit_wonder/8-BITWONDER.TTF', 45)
+
+        # surface objects are created for each component
         heading = font.render('Select a level', True, WHITE)
         cursor = font.render('X', True, WHITE)
         easy = font.render('Easy', True, WHITE)
@@ -42,6 +44,7 @@ class Menu:
         hard = font.render('Hard', True, WHITE)
         exit = font.render('Exit Game', True, WHITE)
 
+        # returns the area that will hold each menu component
         heading_pos = heading.get_rect()
         cursor_pos = cursor.get_rect()
         easy_pos = easy.get_rect()

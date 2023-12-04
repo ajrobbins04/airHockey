@@ -49,10 +49,8 @@ class Puck(FieldObject):
         angle = math.pi / 2 - math.atan2(y, x)
         return (angle, magnitude)
 
-   
-    def resolve_collision(self, paddle: Paddle):
 
-        # must find normal of collision to determine the direction of puck's movement
+    def resolve_collision(self, paddle: Paddle):
        
         # distance between the center of both circles
         distance = pygame.Vector2(self.rect.center).distance_to(pygame.Vector2(paddle.rect.center))
@@ -73,6 +71,7 @@ class Puck(FieldObject):
         pre_collision_puck = pygame.Vector2(self.get_direction(), self.get_speed() * (self.mass - paddle.get_mass()) / total_mass)
         post_collision_puck = pygame.Vector2(projection_angle, 2 * paddle.get_speed() * paddle.get_mass() / total_mass)
 
+        self.update_velocity(projection_angle)
         puck_direction_speed = pygame.Vector2(self.add_vectors(pre_collision_puck, post_collision_puck))
         self.set_speed(puck_direction_speed.y)
         self.update_velocity(puck_direction_speed.x)
@@ -84,10 +83,9 @@ class Puck(FieldObject):
             self.update_rect()
         if paddle.crossed_boundaries() == True:
             self.update_rect() 
-
-
+  
     def separate(self, paddle: Paddle):
-        # the distance between the centers of the puck and paddle
+        # applies distance formula for distance between the centers of the puck and paddle
         distance = pygame.Vector2(self.rect.center).distance_to(pygame.Vector2(paddle.rect.center))
 
         # amount of displacement determined by amount of overlap
