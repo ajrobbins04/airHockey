@@ -32,10 +32,7 @@ class Menu:
         self.cursor_offset = -200
         # menu items will be spaced 100 px apart on y axis
         self.menu_item = 100
-
-    def get_running(self):
-        return self.running 
-    
+         
     def get_playing(self):
         return self.playing
     
